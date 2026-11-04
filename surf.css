@@ -33,3 +33,5 @@ html.ze-voice-on .ze-sound-hint{display:none}
 .ze-ios-share{display:inline-block;padding:0 4px;border:1px solid currentColor;border-radius:5px;font-size:12px}
 .ze-install-toast{background:linear-gradient(125deg,#f8ffff,#d4f0f7)}
 @media(max-width:560px){.ze-install-toast{flex-wrap:wrap;font-size:14px;gap:12px;padding:16px}.ze-install-toast p{flex:1 1 calc(100% - 60px)}.ze-install-toast button{flex:1 1 100%;padding:11px}}
+
+.no-voice .ze-sound-hint{display:none}

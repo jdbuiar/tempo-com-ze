@@ -3,12 +3,12 @@ const AquaCharacterWeather={
   select(data,now=Date.now()){
     const c=data?.current;if(!c||!Number.isFinite(c.weather_code)||!Number.isFinite(c.temperature_2m))return null;
     const code=c.weather_code,temp=c.temperature_2m;
-    const storm=[65,67,82,95,96,99].includes(code);
-    const rain=[61,63,66,80,81].includes(code),drizzle=[51,53,55,56,57].includes(code),snow=[71,73,75,77,85,86].includes(code);
+    const storm=[95,96,99,1001].includes(code);
+    const rain=[61,63,65,66,67,80,81,82].includes(code),drizzle=[51,53,55,56,57].includes(code),snow=[71,73,75,77,85,86].includes(code);
     const solar=Number.isFinite(data.sunrise)&&Number.isFinite(data.sunset)&&data.sunset>data.sunrise;
     const isDay=solar?now/1000>=data.sunrise&&now/1000<data.sunset:!!c.is_day;
     const sunCare=isDay&&[0,1,2].includes(code)&&temp>=24;
-    const variant=storm?'storm':rain?'rain':drizzle?'drizzle':snow||temp<=16?'cold':sunCare?'sunny':'mild';
+    const variant=storm||data.stormSoon?'storm':rain?'rain':drizzle?'drizzle':snow||temp<=16?'cold':sunCare?'sunny':'mild';
     let hour;try{hour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:data.timezone||'America/Sao_Paulo',hour:'2-digit',hourCycle:'h23'}).format(now))}catch{hour=new Date(now+(data.utcOffsetSeconds||0)*1000).getUTCHours()}
     const period=!isDay?'night':hour<12?'morning':'afternoon';
     return {variant,period,isDay,code,temp,snow,sunCare:variant==='sunny'};
@@ -26,7 +26,8 @@ const AquaCharacterWeather={
     if(c.variant==='mild'&&!c.isDay)care={pt:'Vamos acompanhar o tempo desta noite. Tem que se cuidar, não é mesmo?',es:'Vamos a seguir el tiempo de esta noche. Hay que cuidarse, ¿verdad?',en:'Let’s keep an eye on tonight’s weather. You have to take care of yourself, right?'}[l];
     else if(c.variant==='mild'&&[3,45,48].includes(c.code))care={pt:'Hoje o céu está '+(c.code===3?'nublado.':'com neblina.')+' Tem que se cuidar, não é mesmo?',es:'Hoy el cielo está '+(c.code===3?'nublado.':'con niebla.')+' Hay que cuidarse, ¿verdad?',en:(c.code===3?'Cloudy skies today.':'Foggy weather today.')+' You have to take care of yourself, right?'}[l];
     const descriptions={pt:'Zé acompanha o tempo da sua cidade e muda de roupa conforme a previsão.',es:'Zé sigue el tiempo de tu ciudad y cambia de ropa según el pronóstico.',en:'Zé follows your city’s weather and changes outfits with the forecast.'};
-    return {sunny:introductions[l]+' '+salutations[l][c.period],care,description:descriptions[l]};
+    const warn={pt:'Se cuida! Está vindo uma tempestade com ventos fortes!',es:'¡Cuídate! Viene una tormenta con vientos fuertes.',en:'Take care! A storm with strong winds is coming!'}[l];
+    return {sunny:introductions[l]+' '+salutations[l][c.period],care,storm:warn,description:descriptions[l]};
   },
   asset(variant){return 'assets/ze-'+variant+'.webp'}
 };

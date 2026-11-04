@@ -43,7 +43,7 @@
     }catch{if(revision===assetRevision){stage.style.visibility='hidden';stage.classList.remove('character-ready')}}
   }
 
-  function updateSpeech(kind){speechKind=kind;phrase.textContent=text()[kind]}
+  function updateSpeech(kind){speechKind=kind;phrase.textContent=text()[kind];bubble.classList.toggle('no-voice',kind==='storm')}
   function layout(){
     routeWidth=Math.max(0,stage.clientWidth-traveler.offsetWidth-20);
     const rio=Array.from(document.querySelectorAll('.city-chip')).find(b=>b.textContent.includes('Rio de Janeiro'));
@@ -77,6 +77,8 @@
     }
     if(pose!==lastPose){sprite.dataset.pose=pose;lastPose=pose}
   }
+  /* Storm: Zé runs across without stopping, warning about the storm; repeats every 12 s. */
+  function stormSample(t){const size=traveler.offsetWidth,start=-size,end=stage.clientWidth+20,speed=size*1.25,dur=(end-start)/speed*1000,tt=t%12000;if(tt>dur)return {pose:'waiting',x:start,frame:0,opacity:0};const d=tt/1000*speed;return {pose:'running',x:start+d,frame:Math.floor(d/(size*.5)*10)%10,opacity:1}}
   function stopVoice(){speechSerial++;if(speechSupported&&utterance)ZeVoice.cancel();speaking=false;utterance=null}
   function speak(){
     if(!speechSupported)return;stopVoice();
@@ -100,6 +102,7 @@
     }
     const state=AquaWalkMotion.sample(elapsed,path);
     let {x,pose,frame,atlas,left,kind}=state;
+    if(activeVariant==='storm'&&!reduce.matches){const r=stormSample(elapsed);x=r.x;pose=r.pose;atlas='walk';frame=r.frame;left=false;kind='storm';state.opacity=r.opacity}
     if(reduce.matches){x=stopX;atlas='greeting';frame=3;pose='greeting';kind='care'}
     if(frozen&&elapsed<path.marks.enter){x=stopX;atlas='greeting';frame=3;pose='greeting'}
     if(pose==='greeting'){
@@ -107,7 +110,7 @@
       frame=!frozen&&(speaking||elapsed-from<3500)?1:3;
     }
     if(kind!==speechKind)updateSpeech(kind);
-    setFrame(atlas,frame,pose,left);bubble.hidden=pose!=='greeting';
+    setFrame(atlas,frame,pose,left);bubble.hidden=pose!=='greeting'&&pose!=='running';
     const present=pose!=='waiting'&&stage.classList.contains('character-ready');row.classList.toggle('character-present',present);
     stage.style.visibility=present?'visible':'hidden';stage.setAttribute('aria-hidden',String(!present));
     if(pose==='greeting'&&!frozen&&!spoken[kind]&&ZeVoice.enabled)speak();
