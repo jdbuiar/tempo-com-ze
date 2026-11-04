@@ -47,7 +47,7 @@ function greet(){if(!ready||!visible||active||paused())return;const now=performa
 window.addEventListener('ze:voice-ready',()=>{translate();if(active&&host.dataset.pose==='greeting'&&!utterance){voiceAttempted=true;speak();}else if(!active&&visible){if(!voiceAttempted)hasGreeted=false;greet();}});
 mount();window.addEventListener('ze:surf-render',mount);
 new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)greet();else finish();},{rootMargin:'0px 0px -15% 0px',threshold:0}).observe(section);
-Promise.all(['assets/ze-surf-greeting.png','assets/ze-surf-walk-10.png'].map(src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=resolve;image.onerror=reject;image.src=src;}))).then(()=>{ready=true;host.classList.add('surf-ze-ready');if(visible)greet();}).catch(()=>{host.classList.add('surf-ze-unavailable');});
+Promise.all(['assets/ze-surf-greeting.webp','assets/ze-surf-walk-10.webp'].map(src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=resolve;image.onerror=reject;image.src=src;}))).then(()=>{ready=true;host.classList.add('surf-ze-ready');if(visible)greet();}).catch(()=>{host.classList.add('surf-ze-unavailable');});
 document.getElementById('surf-nav').addEventListener('click',()=>{if(visible)greet();});
 document.getElementById('language').addEventListener('change',()=>{stopVoice();translate();});
 document.getElementById('motion').addEventListener('click',()=>{if(paused())stopVoice();});

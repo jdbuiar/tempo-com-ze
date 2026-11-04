@@ -33,8 +33,8 @@
     weatherContext=next;const revision=++assetRevision;
     if(changed)stopVoice();
     stage.style.visibility='hidden';if(next.variant!==activeVariant)stage.classList.remove('character-ready');
-    const sources=next.variant==='sunny'?['assets/sun-care-character.png','assets/sun-greeting-character.png','assets/sun-walk-cycle-10.png']:[AquaCharacterWeather.asset(next.variant)];
-    if(next.variant==='drizzle')sources.push('assets/ze-drizzle-walk-10.png');
+    const sources=next.variant==='sunny'?['assets/sun-care-character.webp','assets/sun-greeting-character.webp','assets/sun-walk-cycle-10.webp']:[AquaCharacterWeather.asset(next.variant)];
+    if(next.variant==='drizzle')sources.push('assets/ze-drizzle-walk-10.webp');
     try{
       await Promise.all(sources.map(loadImage));if(revision!==assetRevision)return;
       activeVariant=next.variant;currentFrame='';stage.dataset.variant=activeVariant;stage.dataset.period=next.period;
@@ -59,11 +59,11 @@
     if(next!==currentFrame){
       currentFrame=next;sprite.classList.toggle('greeting-sprite',atlas==='greeting');sprite.classList.toggle('walking-sprite',atlas==='walk');
       if(activeVariant==='sunny'){
-        sprite.style.backgroundImage=`url('assets/${atlas==='greeting'?'sun-greeting-character.png':atlas==='walk'?'sun-walk-cycle-10.png':'sun-care-character.png'}')`;
+        sprite.style.backgroundImage=`url('assets/${atlas==='greeting'?'sun-greeting-character.webp':atlas==='walk'?'sun-walk-cycle-10.webp':'sun-care-character.webp'}')`;
         sprite.style.backgroundSize=atlas==='greeting'?'200% 200%':atlas==='walk'?'500% 200%':'400% 200%';
         sprite.style.backgroundPosition=atlas==='greeting'?`${index%2*100}% ${index<2?0:100}%`:atlas==='walk'?`${index%5*25}% ${index<5?0:100}%`:`${index%4*100/3}% ${index<4?0:100}%`;
       }else if(activeVariant==='drizzle'&&atlas==='walk'){
-        sprite.style.backgroundImage="url('assets/ze-drizzle-walk-10.png')";sprite.style.backgroundSize='500% 200%';sprite.style.backgroundPosition=`${index%5*25}% ${index<5?0:100}%`;
+        sprite.style.backgroundImage="url('assets/ze-drizzle-walk-10.webp')";sprite.style.backgroundSize='500% 200%';sprite.style.backgroundPosition=`${index%5*25}% ${index<5?0:100}%`;
       }else{
         const cell=atlas==='walk'?index:atlas==='greeting'?[10,11,11,14][index]:index<4?10:index%2?13:12;
         sprite.style.backgroundImage=`url('${AquaCharacterWeather.asset(activeVariant)}')`;sprite.style.backgroundSize='500% 300%';sprite.style.backgroundPosition=`${cell%5*25}% ${Math.floor(cell/5)*50}%`;

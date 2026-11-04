@@ -28,6 +28,6 @@ const AquaCharacterWeather={
     const descriptions={pt:'Zé acompanha o tempo da sua cidade e muda de roupa conforme a previsão.',es:'Zé sigue el tiempo de tu ciudad y cambia de ropa según el pronóstico.',en:'Zé follows your city’s weather and changes outfits with the forecast.'};
     return {sunny:introductions[l]+' '+salutations[l][c.period],care,description:descriptions[l]};
   },
-  asset(variant){return 'assets/ze-'+variant+'.png'}
+  asset(variant){return 'assets/ze-'+variant+'.webp'}
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=AquaCharacterWeather;

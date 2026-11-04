@@ -32,14 +32,14 @@
 .sun-character-stage{position:absolute;left:7px;right:7px;bottom:8px;height:180px;z-index:4;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .4s}
 .sun-character-stage.character-ready{opacity:1}
 .sun-character-traveler{position:absolute;left:0;bottom:7px;width:180px;height:180px;will-change:transform}
-.sun-character-sprite{position:absolute;inset:0;background-image:url('assets/sun-care-character.png');background-repeat:no-repeat;background-size:400% 200%;background-position:0 0;filter:drop-shadow(2px 5px 3px rgba(17,83,115,.13))}
+.sun-character-sprite{position:absolute;inset:0;background-image:url('assets/sun-care-character.webp');background-repeat:no-repeat;background-size:400% 200%;background-position:0 0;filter:drop-shadow(2px 5px 3px rgba(17,83,115,.13))}
 .character-ground-shadow{position:absolute;bottom:4px;left:56px;width:78px;height:9px;background:radial-gradient(ellipse,rgba(34,104,145,.3),rgba(34,104,145,0) 72%);filter:blur(2px);border-radius:50%}
 .character-route{position:absolute;left:25px;right:25px;bottom:12px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65) 18%,rgba(186,229,248,.32) 70%,transparent);box-shadow:0 2px 4px rgba(38,113,164,.15)}
 .character-unavailable>.hero{padding-bottom:0}.character-unavailable>.day-card{padding-bottom:20px}
 @media(max-width:650px){.overview-grid>.hero{padding-bottom:184px}.overview-grid>.day-card{padding-bottom:22px}.sun-character-stage{height:172px;left:6px;right:6px}.sun-character-traveler{width:170px;height:170px}.character-ground-shadow{left:53px;width:73px}.character-route{left:17px;right:17px}.character-unavailable>.hero{padding-bottom:0}}
 @media(prefers-reduced-motion:reduce){.sun-character-stage{transition:none}}
 
-.sun-character-sprite.greeting-sprite{background-image:url('assets/sun-greeting-character.png');background-size:200% 200%}
+.sun-character-sprite.greeting-sprite{background-image:url('assets/sun-greeting-character.webp');background-size:200% 200%}
 .character-speech{position:absolute;left:151px;top:18px;width:206px;padding:12px 16px 10px;border:1px solid rgba(240,254,255,.95);border-radius:19px 19px 19px 4px;background:linear-gradient(125deg,rgba(239,253,255,.92),rgba(172,221,243,.88));box-shadow:inset 0 1px 0 #fff,0 7px 24px rgba(30,94,139,.14);backdrop-filter:blur(7px);color:#1d5367;pointer-events:auto}
 .character-speech[hidden]{display:none}
 .character-speech p{font:650 17px/1.4 'Manrope',var(--font);letter-spacing:-.3px}
@@ -48,7 +48,7 @@
 @media(max-width:850px) and (min-width:651px){.character-speech{left:120px;width:175px}.character-speech p{font-size:15px}}
 @media(max-width:650px){.overview-grid>.hero{padding-bottom:229px}.sun-character-stage{height:217px}.character-speech{left:-10px;top:-42px;width:197px;padding:9px 12px 7px;border-radius:16px 16px 16px 4px}.character-speech p{font-size:15px}.character-speech button{margin-top:3px;font-size:9px}}
 @media(max-width:650px){.overview-grid>.hero{padding-bottom:251px}.sun-character-stage{height:239px}.character-speech{left:-28px;top:-62px;width:220px;padding:8px 12px 7px}.character-speech p{font-size:14px}}
-.sun-character-sprite.walking-sprite{background-image:url('assets/sun-walk-cycle-10.png');background-size:500% 200%}
+.sun-character-sprite.walking-sprite{background-image:url('assets/sun-walk-cycle-10.webp');background-size:500% 200%}
 
 /* Tempo com Zé identity: the character's face becomes the site's signature. */
 .brand-face{width:54px;height:54px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 3px 5px rgba(23,93,133,.15))}
@@ -76,3 +76,4 @@
 .header nav a:hover{background-color:rgba(238,253,253,.55);box-shadow:inset 0 1px 2px rgba(255,255,255,.9),inset 0 -2px 3px rgba(33,115,182,.17),0 5px 12px rgba(37,105,155,.12)}
 @media(max-width:1100px){.header{height:auto;min-height:115px;flex-wrap:wrap;padding:20px 0;row-gap:16px}.header nav{order:3;flex-basis:100%;justify-content:center}}
 @media(max-width:650px){.header{padding:17px 0 15px;column-gap:8px;row-gap:14px}.header > nav[aria-label]{display:flex;justify-content:flex-start;gap:6px;overflow-x:auto;padding:3px 1px 7px;scrollbar-width:thin}.header nav a,.header nav a:last-child{flex:1 0 auto;min-height:40px;padding:10px 12px;font-size:12px}}
+@media(max-width:650px){.character-speech{width:187px}}
