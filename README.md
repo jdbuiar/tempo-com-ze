@@ -54,6 +54,11 @@ Abra http://localhost:8000 no navegador. Use um servidor HTTP: abrir o HTML dire
 
 ## Alterações incluídas nesta atualização
 
+- Botão "Coloque um ícone no seu celular": instala o site como aplicativo na tela inicial (Android e computador mostram o pedido do navegador; no iPhone aparece o passo a passo). Depois de instalado, avisa que não precisa mais abrir a página. Arquivos novos: `install.js`, `sw.js`, `manifest.webmanifest` e os ícones `assets/icon-*.png`.
+
+- Zé tocável: um toque no Zé do quadro do tempo ou no Zé surfista libera o som, ele dá um pulinho e fala. Arquivo novo `ze-touch.js`.
+- Alto-falante discreto no balão com "Toque para ouvir" (em PT, ES e EN), que some assim que o navegador libera o som.
+
 - Imagens convertidas para WebP: a pasta de imagens caiu de cerca de 14 MB para menos de 3 MB, sem perda visível. O logo do Zé passou de 2 MB para 23 KB. Favicon e ícone do iPhone ficaram em PNG pequeno.
 - Removida a imagem sun-walk-cycle-v2.png, que não era usada, e os estilos que sobraram do antigo botão do Zé no surfe.
 - Balão de fala do Zé no celular não é mais cortado na borda direita do cartão.

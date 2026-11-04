@@ -20,7 +20,7 @@ function nextPhrase(){
 const supported=!!window.ZeVoice?.supported;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const host=document.createElement('div');host.id='surf-ze';host.className='surf-ze-welcome';host.setAttribute('aria-hidden','true');
-host.innerHTML='<div class="surf-ze-actor" role="img"><div class="surf-ze-sprite" aria-hidden="true"></div></div><div class="surf-ze-bubble" hidden><span class="surf-ze-name"></span><p class="surf-ze-phrase" aria-live="polite"></p></div>';
+host.innerHTML='<div class="surf-ze-actor" role="img"><div class="surf-ze-sprite" aria-hidden="true"></div></div><div class="surf-ze-bubble" hidden><span class="surf-ze-name"></span><p class="surf-ze-phrase" aria-live="polite"></p><span class="ze-sound-hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="w1" d="M16 9.5a3.5 3.5 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="w2" d="M18.5 7a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></div>';
 const actor=host.querySelector('.surf-ze-actor'),sprite=host.querySelector('.surf-ze-sprite'),bubble=host.querySelector('.surf-ze-bubble'),phrase=host.querySelector('.surf-ze-phrase');
 let ready=false,visible=false,hasGreeted=false,lastGreeting=-Infinity,progress=0,previous=0,active=false,raf=0,utterance=null,serial=0,voiceAttempted=false,path=null,returnTimer=0;
 const paused=()=>document.body.classList.contains('paused')||document.visibilityState!=='visible';
@@ -45,6 +45,7 @@ function tick(now){raf=0;if(!active)return;const delta=previous?Math.max(0,now-p
 let speakAfterFrame=false;
 function greet(){if(!ready||!visible||active||paused())return;const now=performance.now();if(hasGreeted&&now-lastGreeting<180000)return;nextPhrase();translate();hasGreeted=true;lastGreeting=now;progress=0;previous=0;voiceAttempted=false;active=true;clearTimeout(returnTimer);returnTimer=setTimeout(greet,180000);host.classList.add('surf-ze-active');host.setAttribute('aria-hidden','false');path=makePath();if(reduced.matches){progress=path.enter;actor.style.transform=`translate3d(${path.home}px,0,0)`;}if(!raf)raf=requestAnimationFrame(tick);}
 window.addEventListener('ze:voice-ready',()=>{translate();if(active&&host.dataset.pose==='greeting'&&!utterance){voiceAttempted=true;speak();}else if(!active&&visible){if(!voiceAttempted)hasGreeted=false;greet();}});
+actor.addEventListener('click',()=>{window.ZeTouch?.hop(sprite);if(ZeVoice.enabled&&active&&host.dataset.pose==='greeting'&&!utterance)speak();});
 mount();window.addEventListener('ze:surf-render',mount);
 new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)greet();else finish();},{rootMargin:'0px 0px -15% 0px',threshold:0}).observe(section);
 Promise.all(['assets/ze-surf-greeting.webp','assets/ze-surf-walk-10.webp'].map(src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=resolve;image.onerror=reject;image.src=src;}))).then(()=>{ready=true;host.classList.add('surf-ze-ready');if(visible)greet();}).catch(()=>{host.classList.add('surf-ze-unavailable');});

@@ -115,6 +115,7 @@
     traveler.style.opacity=pose==='waiting'?'0':frozen?'1':String(state.opacity);
     requestAnimationFrame(tick);
   }
+  traveler.addEventListener('click',()=>{window.ZeTouch?.hop(sprite);if(speechSupported&&ZeVoice.enabled&&lastPose==='greeting'&&!utterance)speak();});
   stage.style.visibility='hidden';
   window.addEventListener('aqua:weather',event=>updateWeather(event.detail));
   if(window.aquaWeatherState)updateWeather(window.aquaWeatherState);
