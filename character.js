@@ -43,7 +43,7 @@
     }catch{if(revision===assetRevision){stage.style.visibility='hidden';stage.classList.remove('character-ready')}}
   }
 
-  function updateSpeech(kind){speechKind=kind;phrase.textContent=text()[kind];bubble.classList.toggle('no-voice',kind==='storm')}
+  function updateSpeech(kind){speechKind=kind;phrase.textContent=text()[kind];bubble.classList.toggle('no-voice',kind==='storm'&&!ZeVoice.enabled&&false)}
   function layout(){
     routeWidth=Math.max(0,stage.clientWidth-traveler.offsetWidth-20);
     const rio=Array.from(document.querySelectorAll('.city-chip')).find(b=>b.textContent.includes('Rio de Janeiro'));
@@ -78,7 +78,7 @@
     if(pose!==lastPose){sprite.dataset.pose=pose;lastPose=pose}
   }
   /* Storm: Zé runs across without stopping, warning about the storm; repeats every 12 s. */
-  function stormSample(t){const size=traveler.offsetWidth,start=-size,end=stage.clientWidth+20,speed=size*1.25,dur=(end-start)/speed*1000,tt=t%12000;if(tt>dur)return {pose:'waiting',x:start,frame:0,opacity:0};const d=tt/1000*speed;return {pose:'running',x:start+d,frame:Math.floor(d/(size*.5)*10)%10,opacity:1}}
+  function stormSample(t){const size=traveler.offsetWidth,start=-size,end=stage.clientWidth+20,speed=size*1.05,dur=(end-start)/speed*1000,tt=t%12000;if(tt>dur)return {pose:'waiting',x:start,frame:0,opacity:0};const d=tt/1000*speed;return {pose:'running',x:start+d,frame:Math.floor(d/(size*.5)*10)%10,opacity:1}}
   function stopVoice(){speechSerial++;if(speechSupported&&utterance)ZeVoice.cancel();speaking=false;utterance=null}
   function speak(){
     if(!speechSupported)return;stopVoice();
@@ -98,7 +98,7 @@
       cycleElapsed+=delta;
       if(cycleElapsed>=path.marks.end){
         cycleElapsed%=path.marks.end;elapsed=cycleElapsed;stopVoice();spoken.sunny=false;spoken.care=false;
-      }else if(!speaking){elapsed=Math.min(elapsed+delta,path.marks.end-1)}else{elapsed=Math.min(elapsed+delta,(speechKind==='care'?path.marks.exit:path.marks.outward)-1)}
+      }else if(!speaking||activeVariant==='storm'){elapsed=Math.min(elapsed+delta,path.marks.end-1)}else{elapsed=Math.min(elapsed+delta,(speechKind==='care'?path.marks.exit:path.marks.outward)-1)}
     }
     const state=AquaWalkMotion.sample(elapsed,path);
     let {x,pose,frame,atlas,left,kind}=state;
@@ -114,6 +114,7 @@
     const present=pose!=='waiting'&&stage.classList.contains('character-ready');row.classList.toggle('character-present',present);
     stage.style.visibility=present?'visible':'hidden';stage.setAttribute('aria-hidden',String(!present));
     if(pose==='greeting'&&!frozen&&!spoken[kind]&&ZeVoice.enabled)speak();
+    if(pose==='running'&&!frozen&&ZeVoice.enabled&&!utterance&&now-(window.zeStormSaid||-1e9)>60000){window.zeStormSaid=now;speak()}
     traveler.style.transform=`translate3d(${x+10}px,0px,0)`;
     traveler.style.opacity=pose==='waiting'?'0':frozen?'1':String(state.opacity);
     requestAnimationFrame(tick);
