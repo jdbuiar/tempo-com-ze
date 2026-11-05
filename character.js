@@ -77,8 +77,8 @@
     }
     if(pose!==lastPose){sprite.dataset.pose=pose;lastPose=pose}
   }
-  /* Storm: Zé runs across without stopping, warning about the storm; repeats every 12 s. */
-  function stormSample(t){const size=traveler.offsetWidth,start=-size,end=stage.clientWidth+20,speed=size*1.05,dur=(end-start)/speed*1000,tt=t%12000;if(tt>dur)return {pose:'waiting',x:start,frame:0,opacity:0};const d=tt/1000*speed;return {pose:'running',x:start+d,frame:Math.floor(d/(size*.5)*10)%10,opacity:1}}
+  /* Storm: Zé hurries across without stopping, warning about the storm; pauses 4 s, then repeats (min. 12 s cycle). */
+  function stormSample(t){const size=traveler.offsetWidth,start=-size,end=stage.clientWidth+20,speed=size*.55,dur=(end-start)/speed*1000,cycle=Math.max(12000,dur+4000),tt=t%cycle;if(tt>dur)return {pose:'waiting',x:start,frame:0,opacity:0};const d=tt/1000*speed;return {pose:'running',x:start+d,frame:Math.floor(d/(size*.5)*10)%10,opacity:1}}
   function stopVoice(){speechSerial++;if(speechSupported&&utterance)ZeVoice.cancel();speaking=false;utterance=null}
   function speak(){
     if(!speechSupported)return;stopVoice();
