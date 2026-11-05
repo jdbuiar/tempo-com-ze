@@ -7,7 +7,7 @@ const AquaCharacterWeather={
     const rain=[61,63,65,66,67,80,81,82].includes(code),drizzle=[51,53,55,56,57].includes(code),snow=[71,73,75,77,85,86].includes(code);
     const solar=Number.isFinite(data.sunrise)&&Number.isFinite(data.sunset)&&data.sunset>data.sunrise;
     const isDay=solar?now/1000>=data.sunrise&&now/1000<data.sunset:!!c.is_day;
-    const sunCare=isDay&&[0,1,2].includes(code)&&temp>=24;
+    const sunCare=isDay&&[0,1].includes(code)&&temp>=24;
     const variant=storm||data.stormSoon?'storm':rain?'rain':drizzle?'drizzle':snow||temp<=16?'cold':sunCare?'sunny':'mild';
     let hour;try{hour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:data.timezone||'America/Sao_Paulo',hour:'2-digit',hourCycle:'h23'}).format(now))}catch{hour=new Date(now+(data.utcOffsetSeconds||0)*1000).getUTCHours()}
     const period=!isDay?'night':hour<12?'morning':'afternoon';
