@@ -1,6 +1,6 @@
 /* Tempo com Zé: opens instantly from the phone's copy, then refreshes in the background.
    Versioned files (?v=) never change, so they are served straight from the cache. */
-const CACHE='tempo-com-ze-v13';
+const CACHE='tempo-com-ze-v14';
 self.addEventListener('install',e=>{self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 function put(req,res){if(res&&res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy)).catch(()=>{});}return res;}
