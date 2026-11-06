@@ -4,7 +4,7 @@
 const spots = [
  {id:'matinhos',state:'PR',name:'Pico de Matinhos',city:'Matinhos',lat:-25.819,lon:-48.533,source:'pr'},
  {id:'caioba',state:'PR',name:'Praia Brava de Caiobá',city:'Matinhos',lat:-25.853,lon:-48.538,source:'pr'},
- {id:'ilha-mel',state:'PR',name:'Praia de Brasília',city:'Ilha do Mel · Paranaguá',lat:-25.539,lon:-48.299,source:'ilha'},
+ {id:'ilha-mel',state:'PR',name:'Praia Grande',city:'Ilha do Mel · Paranaguá',lat:-25.549,lon:-48.294,source:'ilha'},
  {id:'joaquina',state:'SC',name:'Joaquina',city:'Florianópolis',lat:-27.629,lon:-48.449,source:'br'},
  {id:'mole',state:'SC',name:'Praia Mole',city:'Florianópolis',lat:-27.603,lon:-48.433,source:'br'},
  {id:'guarda',state:'SC',name:'Guarda do Embaú',city:'Palhoça',lat:-27.903,lon:-48.592,source:'br'},
