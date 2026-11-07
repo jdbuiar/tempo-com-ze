@@ -22,7 +22,7 @@ async function speak(line){
  cancel();const id=serial;
  try{
   const data=await manifest();if(id!==serial)return;
-  const src=data.clips[line.lang.split('-')[0]]?.[line.text];if(!src)throw Error('Recorded line unavailable');
+  const clips=data.clips[line.lang.split('-')[0]]||{};/* a longer line still plays the recorded part it starts with */const src=clips[line.text]||clips[Object.keys(clips).filter(k=>line.text.startsWith(k)).sort((a,b)=>b.length-a.length)[0]];if(!src)throw Error('Recorded line unavailable');
   detach();player.src=src;player.volume=Math.max(0,Math.min(1,line.volume??.85));player.playbackRate=1;player.defaultPlaybackRate=1;player.dataset.state='loading';
   const item={utterance:line,timer:null};current=item;
   const fail=error=>{if(id!==serial||current!==item)return;current=null;clearTimeout(item.timer);detach();player.dataset.state='error';line.onerror?.({error});};
