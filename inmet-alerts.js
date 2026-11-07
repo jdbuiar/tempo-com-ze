@@ -88,13 +88,15 @@
   function decideZe(avisos){
     const official=avisos.filter(a=>a.vigente&&isRunType(a));
     if(!official.length)return; // no official storm warning now: the model rule stays
-    const run=official.some(a=>a.nivel>=2);
+    /* Zé only runs and dresses for the storm when the sky agrees (rain or storm now or in the next hour);
+       until then he keeps the outfit for the current sky and mentions the official warning. */
+    const danger=official.some(a=>a.nivel>=2),near=!!(window.aquaWeatherState?.wetNear||window.aquaWeatherState?.stormSoon),run=danger&&near,alert=danger&&!run;
     const storm=document.getElementById('storm-alert');if(storm)storm.hidden=true; // the INMET card already says it
     const base=window.aquaWeatherState;if(!base?.current)return;
     const code=base.current.weather_code;
     const current=!run&&STORM_CODES.includes(code)?{...base.current,weather_code:63}:base.current;
-    if(base.stormSoon===run&&current===base.current)return;
-    const next={...base,stormSoon:run,current,inmet:true};
+    if(base.stormSoon===run&&current===base.current&&!!base.alert===alert)return;
+    const next={...base,stormSoon:run,alert,current,inmet:true};
     window.aquaWeatherState=next;
     window.dispatchEvent(new CustomEvent('aqua:weather',{detail:next}));
   }

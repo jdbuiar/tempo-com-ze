@@ -11,7 +11,7 @@ const AquaCharacterWeather={
     const variant=storm||data.stormSoon?'storm':rain?'rain':drizzle?'drizzle':snow||temp<=16?'cold':sunCare?'sunny':'mild';
     let hour;try{hour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:data.timezone||'America/Sao_Paulo',hour:'2-digit',hourCycle:'h23'}).format(now))}catch{hour=new Date(now+(data.utcOffsetSeconds||0)*1000).getUTCHours()}
     const period=!isDay?'night':hour<12?'morning':'afternoon';
-    return {variant,period,isDay,code,temp,snow,sunCare:variant==='sunny'};
+    return {variant,period,isDay,code,temp,snow,sunCare:variant==='sunny',alert:!!data.alert&&variant!=='storm'};
   },
   lines(context,lang='pt'){
     const l=['pt','es','en'].includes(lang)?lang:'pt',c=context||{variant:'sunny',period:'morning',isDay:true,code:0};
@@ -25,6 +25,7 @@ const AquaCharacterWeather={
     let care=middle[l][c.snow?'snow':c.variant];
     if(c.variant==='mild'&&!c.isDay)care={pt:'Vamos acompanhar o tempo desta noite. Tem que se cuidar, não é mesmo?',es:'Vamos a seguir el tiempo de esta noche. Hay que cuidarse, ¿verdad?',en:'Let’s keep an eye on tonight’s weather. You have to take care of yourself, right?'}[l];
     else if(c.variant==='mild'&&[3,45,48].includes(c.code))care={pt:'Hoje o céu está '+(c.code===3?'nublado.':'com neblina.')+' Tem que se cuidar, não é mesmo?',es:'Hoy el cielo está '+(c.code===3?'nublado.':'con niebla.')+' Hay que cuidarse, ¿verdad?',en:(c.code===3?'Cloudy skies today.':'Foggy weather today.')+' You have to take care of yourself, right?'}[l];
+    if(c.alert)care={pt:'O INMET avisou que pode vir tempestade hoje. Fica de olho no céu!',es:'El INMET avisó que puede venir tormenta hoy. ¡Atento al cielo!',en:'INMET warns a storm may come today. Keep an eye on the sky!'}[l];
     const descriptions={pt:'Zé acompanha o tempo da sua cidade e muda de roupa conforme a previsão.',es:'Zé sigue el tiempo de tu ciudad y cambia de ropa según el pronóstico.',en:'Zé follows your city’s weather and changes outfits with the forecast.'};
     const warn={pt:'Se cuida! Está vindo uma tempestade com ventos fortes!',es:'¡Cuídate! Viene una tormenta con vientos fuertes.',en:'Take care! A storm with strong winds is coming!'}[l];
     return {sunny:introductions[l]+' '+salutations[l][c.period],care,storm:warn,description:descriptions[l]};
