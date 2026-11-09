@@ -5,7 +5,7 @@ const supported=typeof Audio==='function';
 const player=supported?new Audio():null;
 let current=null,serial=0,enabled=false,activation=null,manifestTask=null;
 if(player){player.id='ze-voice-player';player.hidden=true;player.preload='auto';player.dataset.state='locked';document.body.append(player);}
-function manifest(){if(!manifestTask){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);manifestTask=fetch('assets/ze-voice-natural/manifest.json',{signal:controller.signal}).then(r=>{if(!r.ok)throw Error('Voice manifest unavailable');return r.json();}).finally(()=>clearTimeout(timer)).catch(e=>{manifestTask=null;throw e;});}return manifestTask;}
+function manifest(){if(!manifestTask){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);manifestTask=fetch('assets/ze-voice-natural/manifest.json?v=2',{signal:controller.signal}).then(r=>{if(!r.ok)throw Error('Voice manifest unavailable');return r.json();}).finally(()=>clearTimeout(timer)).catch(e=>{manifestTask=null;throw e;});}return manifestTask;}
 manifest().catch(()=>{});
 function detach(){if(!player)return;player.onplaying=player.onended=player.onerror=null;player.pause();}
 function cancel(){serial++;if(!current)return;const previous=current;current=null;clearTimeout(previous.timer);detach();player.dataset.state=enabled?'ready':'locked';previous.utterance.onerror?.({error:'canceled'});}
