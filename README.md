@@ -23,7 +23,7 @@ Site estático (HTML, CSS e JavaScript puro), publicado pelo GitHub Pages a part
 | Mapa | Windy (carrega só quando o visitante abre) |
 | Comentários dos visitantes | Tabela `ze_comentarios` no Supabase (só aceita envio, ninguém lê pelo site) |
 
-Os dois Workers ficam na conta Cloudflare do site (buiarjefferson). O token da API de estações do INMET foi pedido e ainda não chegou.
+Os dois Workers ficam na conta Cloudflare do site (buiarjefferson). A API de estações do INMET não está liberada: o INMET só dá acesso com Acordo de Cooperação Técnica (ACT) firmado com uma instituição. Por isso o "agora" vem do METAR de aeroporto e do radar.
 
 ### Regras do Zé
 
