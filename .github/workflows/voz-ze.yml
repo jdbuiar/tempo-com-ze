@@ -1,0 +1,27 @@
+name: Gravar voz do Zé
+on:
+  push:
+    branches: [main]
+    paths: [character-weather.js, scripts/gravar_voz.py, .github/workflows/voz-ze.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  gravar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install edge-tts
+      - run: python scripts/gravar_voz.py
+      - name: Salvar os áudios novos
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Voz do Zé: grava as falas novas"
+            git push
+          fi

@@ -97,7 +97,7 @@
     if(!frozen){
       cycleElapsed+=delta;
       if(cycleElapsed>=path.marks.end){
-        cycleElapsed%=path.marks.end;elapsed=cycleElapsed;stopVoice();spoken.sunny=false;spoken.care=false;
+        cycleElapsed%=path.marks.end;elapsed=cycleElapsed;stopVoice();spoken.sunny=false;spoken.care=false;AquaCharacterWeather.next();updateSpeech(speechKind);
       }else if(!speaking||activeVariant==='storm'){elapsed=Math.min(elapsed+delta,path.marks.end-1)}else{elapsed=Math.min(elapsed+delta,(speechKind==='care'?path.marks.exit:path.marks.outward)-1)}
     }
     const state=AquaWalkMotion.sample(elapsed,path);
