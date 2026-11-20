@@ -28,6 +28,11 @@ const AquaCharacterWeather={
           afternoon:['Hi, my name is Zé. Good afternoon!','Good afternoon! Zé stopped by to check the sky.','Good afternoon, everyone! How is the weather where you are?','Hey, good afternoon! Shall we check the forecast together?'],
           night:['Hi, my name is Zé. Good evening!','Good evening! Zé is still keeping an eye on the sky.','Good evening, everyone! Shall we see how the weather looks?','Hey, good evening! Have you seen tomorrow’s forecast?']}
     },
+    alert:{
+      pt:['O INMET avisou que pode vir tempestade hoje. Na hora, não fique embaixo nem perto de árvores e postes de luz!','Tem aviso do INMET de tempestade pra hoje. Se o tempo virar, fique longe de árvores e postes de luz!','Atenção: o INMET alertou para tempestade hoje. Quando chegar, nada de ficar perto de árvores e postes de luz!','Hoje o INMET deu alerta de tempestade. Se começar, procure abrigo longe de árvores e postes de luz!'],
+      es:['El INMET avisó que puede venir tormenta hoy. En ese momento, no te quedes debajo ni cerca de árboles y postes de luz.','Hay aviso del INMET de tormenta para hoy. Si cambia el tiempo, aléjate de árboles y postes de luz.','Atención: el INMET alertó de tormenta hoy. Cuando llegue, nada de quedarse cerca de árboles y postes de luz.','Hoy el INMET dio alerta de tormenta. Si empieza, busca refugio lejos de árboles y postes de luz.'],
+      en:['INMET warns a storm may come today. When it hits, stay away from trees and power poles!','There is an INMET storm warning for today. If the weather turns, keep away from trees and power poles!','Heads up: INMET issued a storm alert today. When it arrives, stay clear of trees and power poles!','INMET put out a storm alert today. If it starts, take shelter away from trees and power poles!']
+    },
     care:{
       pt:{mild:['Hoje está ameno. De jeans e camisa, estou preparado!','Temperatura agradável hoje. Dia bom pra sair!','Nem frio, nem calor. Jeans e camisa resolvem!','Clima gostoso hoje. Aproveita o dia!'],
           sunny:['Ótimo dia de sol! Tem que se cuidar, não é mesmo?','Sol forte hoje! Não esquece o protetor e a água.','Que dia bonito! Passa protetor antes de sair, combinado?','Calorzinho bom! Chapéu, protetor e bastante água.'],
@@ -71,7 +76,8 @@ const AquaCharacterWeather={
     else if(c.variant==='mild'&&[45,48].includes(c.code))kind='fog';
     let careLine=this.pick(care[kind]||care.mild);
     // Safety messages stay fixed: they must always be the same clear warning.
-    if(c.alert)careLine={pt:'O INMET avisou que pode vir tempestade hoje. Na hora, não fique embaixo nem perto de árvores e postes de luz!',es:'El INMET avisó que puede venir tormenta hoy. En ese momento, no te quedes debajo ni cerca de árboles y postes de luz.',en:'INMET warns a storm may come today. When it hits, stay away from trees and power poles!'}[l];
+    // INMET warning: the wording varies, but every version keeps the safety advice.
+    if(c.alert)careLine=this.pick(this.pools.alert[l]);
     const descriptions={pt:'Zé acompanha o tempo da sua cidade e muda de roupa conforme a previsão.',es:'Zé sigue el tiempo de tu ciudad y cambia de ropa según el pronóstico.',en:'Zé follows your city’s weather and changes outfits with the forecast.'};
     const warn={pt:'Se cuida! Está vindo uma tempestade com ventos fortes! Não fique embaixo nem perto de árvores e postes de luz.',es:'¡Cuídate! Viene una tormenta con vientos fuertes. No te quedes debajo ni cerca de árboles y postes de luz.',en:'Take care! A storm with strong winds is coming! Stay away from trees and power poles.'}[l];
     return {sunny:this.pick(this.pools.greet[l][c.period]||this.pools.greet[l].morning),care:careLine,storm:warn,description:descriptions[l]};
@@ -79,7 +85,7 @@ const AquaCharacterWeather={
   /* Every line Zé can say, used by the workflow that records the voice clips. */
   allLines(lang){
     const g=this.pools.greet[lang],c=this.pools.care[lang];
-    return [...Object.values(g).flat(),...Object.values(c).flat()];
+    return [...Object.values(g).flat(),...Object.values(c).flat(),...this.pools.alert[lang]];
   },
   asset(variant){return 'assets/ze-'+variant+'.webp'}
 };
