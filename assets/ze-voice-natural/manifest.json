@@ -63,7 +63,10 @@
    "A noite está calma. Amanhã tem mais previsão!": "assets/ze-voice-natural/pt-v-1499dbfc.mp3",
    "Céu nublado hoje. Vale levar um casaquinho!": "assets/ze-voice-natural/pt-v-13a5175e.mp3",
    "Nuvens cobrindo o céu. Fica de olho na previsão!": "assets/ze-voice-natural/pt-v-24c4e200.mp3",
-   "Neblina lá fora! Cuidado redobrado no trânsito.": "assets/ze-voice-natural/pt-v-189574e5.mp3"
+   "Neblina lá fora! Cuidado redobrado no trânsito.": "assets/ze-voice-natural/pt-v-189574e5.mp3",
+   "Tem aviso do INMET de tempestade pra hoje. Se o tempo virar, fique longe de árvores e postes de luz!": "assets/ze-voice-natural/pt-v-e5d6d651.mp3",
+   "Atenção: o INMET alertou para tempestade hoje. Quando chegar, nada de ficar perto de árvores e postes de luz!": "assets/ze-voice-natural/pt-v-905808ae.mp3",
+   "Hoje o INMET deu alerta de tempestade. Se começar, procure abrigo longe de árvores e postes de luz!": "assets/ze-voice-natural/pt-v-6bc34300.mp3"
   },
   "es": {
    "¡Aloha, gente! ¡Soy Zé! ¿Miramos cómo está el spot? ¡Hang loose!": "assets/ze-voice-natural/es-01.mp3",
@@ -123,7 +126,10 @@
    "La noche está calma. ¡Mañana hay más pronóstico!": "assets/ze-voice-natural/es-v-3b5ac4e5.mp3",
    "Cielo nublado hoy. ¡Lleva una chaquetita!": "assets/ze-voice-natural/es-v-cd81ee85.mp3",
    "Nubes cubriendo el cielo. ¡Atento al pronóstico!": "assets/ze-voice-natural/es-v-73580666.mp3",
-   "¡Niebla afuera! Mucho cuidado en el tráfico.": "assets/ze-voice-natural/es-v-4b9e6ee9.mp3"
+   "¡Niebla afuera! Mucho cuidado en el tráfico.": "assets/ze-voice-natural/es-v-4b9e6ee9.mp3",
+   "Hay aviso del INMET de tormenta para hoy. Si cambia el tiempo, aléjate de árboles y postes de luz.": "assets/ze-voice-natural/es-v-d3f25ad5.mp3",
+   "Atención: el INMET alertó de tormenta hoy. Cuando llegue, nada de quedarse cerca de árboles y postes de luz.": "assets/ze-voice-natural/es-v-b102db79.mp3",
+   "Hoy el INMET dio alerta de tormenta. Si empieza, busca refugio lejos de árboles y postes de luz.": "assets/ze-voice-natural/es-v-6ca65123.mp3"
   },
   "en": {
    "Aloha, crew! Zé here! Let's check the surf. Hang loose!": "assets/ze-voice-natural/en-01.mp3",
@@ -183,7 +189,10 @@
    "The night is calm. More forecast tomorrow!": "assets/ze-voice-natural/en-v-f33a9321.mp3",
    "Cloudy sky today. Worth bringing a light jacket!": "assets/ze-voice-natural/en-v-62abde12.mp3",
    "Clouds covering the sky. Keep an eye on the forecast!": "assets/ze-voice-natural/en-v-521a4630.mp3",
-   "Fog outside! Extra care on the roads.": "assets/ze-voice-natural/en-v-94903575.mp3"
+   "Fog outside! Extra care on the roads.": "assets/ze-voice-natural/en-v-94903575.mp3",
+   "There is an INMET storm warning for today. If the weather turns, keep away from trees and power poles!": "assets/ze-voice-natural/en-v-31f23ce6.mp3",
+   "Heads up: INMET issued a storm alert today. When it arrives, stay clear of trees and power poles!": "assets/ze-voice-natural/en-v-f5a8269f.mp3",
+   "INMET put out a storm alert today. If it starts, take shelter away from trees and power poles!": "assets/ze-voice-natural/en-v-6d973029.mp3"
   }
  }
 }
