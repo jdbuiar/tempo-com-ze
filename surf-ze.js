@@ -33,8 +33,8 @@ const ACTOR={
  niko:{name:'NIKO',walk:WALK.niko,arrive:seq('niko',[10,11,12,12]),talk:seq('niko',[13,14,16,17,18,15]),bye:seq('niko',[19]),exitWalk:WALK.niko},
  brisa:{name:'BRISA',walk:WALK.brisa,arrive:seq('brisa',[18,19]),talk:seq('brisa',[20,21,22,23,21]),leave:seq('brisa',[18]),exitWalk:WALK.brisa}
 };
-/* Walking needs a full cycle: Brisa and Niko always have one, Zé and Jorge only in the mild-weather outfit.
-   In rain, cold and heat they fade in and out on the spot instead of sliding with three poses. */
+/* Walking needs a full cycle: Brisa and Niko always have one, Zé and Jorge only in the mild-weather outfit
+   (duo scenes run only then, see nextScene). */
 const duoActor=(atlas,name,row,jorge,who)=>{const o=(jorge?6:0)+row*12,key=jorge?'jorge':who;
  const smooth=key==='brisa'||key==='niko'||row===0?WALK[key]:null;
  return {name,fade:!smooth,walk:smooth,arrive:seq(atlas,[jorge?o+4:o+2]),listen:seq(atlas,[o+4]),talk:seq(atlas,jorge?[o+2,o+3]:[o+3,o+2]),exitWalk:smooth};};
@@ -55,7 +55,9 @@ function pickIndex(key,count){const s=store(key,{});let last=Number.isInteger(s.
  last=left.shift();save(key,{last,left});return last;}
 /* a new visitor at most once a minute while the surf section stays on screen */
 const GAP=60000;
-function nextScene(){return SCENES[pickIndex('ze-surf-scenes-v1',SCENES.length)];}
+/* Jorge's chats only happen when everyone can walk in for real: his (and Zé's street) walk cycle exists
+   for the mild-weather outfit only, so in rain, cold and heat the beach keeps the solo visitors. */
+function nextScene(){const duoOk=weatherRow()===0;for(let i=0;i<SCENES.length;i++){const s=SCENES[pickIndex('ze-surf-scenes-v1',SCENES.length)];if(duoOk||!s.startsWith('duo'))return s;}return 'ze';}
 
 /* ---------- DOM ---------- */
 const supported=!!window.ZeVoice?.supported;
