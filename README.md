@@ -33,6 +33,10 @@ Os dois Workers ficam na conta Cloudflare do site (buiarjefferson). A API de est
 - Céu só nublado não vira roupa de tempestade, mesmo com aviso no dia.
 - Protetor solar só com céu limpo, de dia e com 24 °C ou mais. Com nuvens fechando, fica de jeans.
 
+### Praia do surfe
+
+Na seção de surfe passa um visitante por minuto enquanto a seção está na tela: o Zé (com voz gravada), o Niko, a Brisa, ou o Jorge encontrando o Zé, o Niko ou a Brisa. A roupa do Jorge (e do Zé de roupa normal) segue o céu da previsão principal: meia estação, chuva, frio ou calor, e as falas da conversa combinam com o tempo. Embaixo dos pés deles corre uma faixa de mar animada. Os atlas (`assets/surf-*.webp`) saem das folhas de animação com `python scripts/montar_sprites_surfe.py PASTA_DAS_FOLHAS`.
+
 ## Arquivos
 
 | Arquivo | Conteúdo |
