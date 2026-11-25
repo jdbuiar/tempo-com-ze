@@ -26,18 +26,18 @@ const walk=(atlas,list,step)=>Object.assign(seq(atlas,list),{step});
 const range=n=>Array.from({length:n},(_,i)=>i);
 /* per-frame advance (fraction of the sprite box), measured by following the foot on the ground from one
    frame to the next; the drawings are not perfectly even, so one number per frame keeps the feet planted */
-const STEPS={"brisa":[0.0171,0.0234,0.0312,0.0327,0.0303,0.0234,0.0189,0.0221,0.0187,0.0111,0.0186,0.0269,0.0273,0.0376,0.0459,0.0371,0.0264,0.0254,0.0273,0.0254,0.0234,0.02,0.0161,0.0161],"ze":[0.0224,0.0234,0.0308,0.0327,0.0322,0.0298,0.0181,0.022,0.0337,0.0293,0.022,0.0142,0.0288,0.0581,0.0474,0.02,0.0142,0.0122,0.0127,0.0205,0.022,0.0166,0.0155,0.0208],"jorge":[0.0298,0.0444,0.0317,0.0234,0.0205,0.0132,0.0269,0.0439,0.0352,0.0234,0.0205,0.0166,0.0283,0.0405,0.0312,0.0225,0.0151,0.0225,0.0464,0.0479,0.0322,0.0195,0.0093,0.0093]};
+const STEPS={"brisa":[0.0171,0.0234,0.0312,0.0327,0.0303,0.0234,0.0186,0.021,0.0176,0.0107,0.0186,0.0269,0.0264,0.0308,0.0352,0.0322,0.0264,0.0254,0.0273,0.0254,0.0234,0.02,0.0161,0.0161],"ze":[0.021,0.022,0.0264,0.0283,0.0273,0.0229,0.0146,0.0161,0.022,0.0225,0.02,0.0132,0.0146,0.0249,0.0234,0.0151,0.0142,0.0122,0.0127,0.0205,0.022,0.0166,0.0142,0.0181],"jorge":[0.0206,0.0261,0.0226,0.0234,0.0205,0.0132,0.0197,0.0295,0.028,0.0234,0.0205,0.0166,0.0201,0.0242,0.0227,0.0217,0.0148,0.0153,0.0277,0.0321,0.028,0.0195,0.0093,0.0093]};
 const WALK={ze:walk('walkZe',range(24),STEPS.ze),jorge:walk('walkJorge',range(24),STEPS.jorge),brisa:walk('walkBrisa',range(24),STEPS.brisa),niko:walk('niko',range(10),.035)};
 const ACTOR={
  ze:{name:'ZÉ',walk:seq('zeWalk',[0,1,2,3,4,5,6,7,8,9]),arrive:seq('zeGreet',[0,1]),talk:seq('zeGreet',[2]),exitWalk:seq('zeWalk',[0,1,2,3,4,5,6,7,8,9])},
  niko:{name:'NIKO',walk:WALK.niko,arrive:seq('niko',[10,11,12,12]),talk:seq('niko',[13,14,16,17,18,15]),bye:seq('niko',[19]),exitWalk:WALK.niko},
  brisa:{name:'BRISA',walk:WALK.brisa,arrive:seq('brisa',[18,19]),talk:seq('brisa',[20,21,22,23,21]),leave:seq('brisa',[18]),exitWalk:WALK.brisa}
 };
-/* Smooth 24-frame cycles where we have them (Brisa and Niko always; Zé and Jorge in the mild-weather outfit);
-   the other outfits still use the three walking poses from the chat sheet. */
+/* Walking needs a full cycle: Brisa and Niko always have one, Zé and Jorge only in the mild-weather outfit.
+   In rain, cold and heat they fade in and out on the spot instead of sliding with three poses. */
 const duoActor=(atlas,name,row,jorge,who)=>{const o=(jorge?6:0)+row*12,key=jorge?'jorge':who;
- const smooth=key==='brisa'||key==='niko'||row===0?WALK[key]:walk(atlas,[o,o+1,o+5],.06);
- return {name,walk:smooth,arrive:seq(atlas,[jorge?o+4:o+2]),listen:seq(atlas,[o+4]),talk:seq(atlas,jorge?[o+2,o+3]:[o+3,o+2]),exitWalk:smooth};};
+ const smooth=key==='brisa'||key==='niko'||row===0?WALK[key]:null;
+ return {name,fade:!smooth,walk:smooth,arrive:seq(atlas,[jorge?o+4:o+2]),listen:seq(atlas,[o+4]),talk:seq(atlas,jorge?[o+2,o+3]:[o+3,o+2]),exitWalk:smooth};};
 
 /* Jorge's outfit (and Zé's street clothes) follow the sky shown on the main forecast. */
 function weatherRow(){const v=document.querySelector('[data-variant]')?.dataset.variant;return v==='sunny'?3:['rain','drizzle','storm'].includes(v)?1:v==='cold'?2:0;}
@@ -96,11 +96,13 @@ function describe(){if(!scene)return;const u=UI[lang()],names=[scene.a.name,scen
 function plan(){
  const s=scene,size=actorA.offsetWidth,width=host.clientWidth,duo=!!s.b;
  const homeA=duo?width/2-size*.78:(width-size)/2,homeB=width/2-size*.22;
- const speed=size*(duo?.5:.7),enter=Math.max((homeA+size)/speed,duo?(width-homeB)/speed:0)*1000;
+ const speed=size*(duo?.5:.7),fadeA=!!s.a.fade,fadeB=!!s.b?.fade;
+ /* someone who fades in only needs the fade time; walkers need the trip */
+ const enter=Math.max(fadeA?700:(homeA+size)/speed*1000,duo?(fadeB?700:(width-homeB)/speed*1000):0);
  const arrive=(s.a.arrive.length*260);
  const talks=[];let t=enter+arrive;for(const [who,text] of s.lines){const d=lineTime(text);talks.push({who,text,start:t,end:t+d});t+=d+280;}
  const exit=t+(s.a.bye?650:s.a.leave?300:0);
- const outA=(width-homeA+size*.2)/speed*1000,outB=duo?(homeB+size*1.1)/speed*1000:0;
+ const outA=fadeA?700:(width-homeA+size*.2)/speed*1000,outB=duo?(fadeB?700:(homeB+size*1.1)/speed*1000):0;
  return {size,width,homeA,homeB,speed,enter,arrive,talks,talkEnd:t,exit,end:exit+Math.max(outA,outB)};
 }
 let ready=false,visible=false,lastGreeting=-Infinity,progress=0,previous=0,active=false,raf=0,utterance=null,serial=0,path=null,returnTimer=0,shown='';
@@ -114,7 +116,7 @@ function speak(idx){const talk=path?.talks[idx];if(!supported||!visible||!talk||
  utterance.onerror=()=>{if(id===serial)utterance=null;};
  ZeVoice.speak(utterance);}
 function stretch(idx,at){const p=path,talk=p.talks[idx];if(!talk||at<=talk.end)return;const extra=at-talk.end;talk.end+=extra;for(const later of p.talks.slice(idx+1)){later.start+=extra;later.end+=extra;}p.talkEnd+=extra;p.exit+=extra;p.end+=extra;}
-function finish(){if(active&&visible){clearTimeout(returnTimer);returnTimer=setTimeout(greet,GAP);}active=false;previous=0;stopVoice();bubble.hidden=true;shown='';host.classList.remove('surf-ze-active','surf-ze-duo');actorB.hidden=true;host.dataset.pose='waiting';host.setAttribute('aria-hidden','true');}
+function finish(){actorA.style.opacity=actorB.style.opacity='';if(active&&visible){clearTimeout(returnTimer);returnTimer=setTimeout(greet,GAP);}active=false;previous=0;stopVoice();bubble.hidden=true;shown='';host.classList.remove('surf-ze-active','surf-ze-duo');actorB.hidden=true;host.dataset.pose='waiting';host.setAttribute('aria-hidden','true');}
 /* gait follows distance: long cycles span one stride, short ones change every ~18% of the body size */
 function walkFrame(list,distance){const s=list.step||.74/list.length,u=Math.max(0,distance)/path.size;
  if(!Array.isArray(s))return cycle(list,Math.floor(u/s));
@@ -122,16 +124,20 @@ function walkFrame(list,distance){const s=list.step||.74/list.length,u=Math.max(
 function tick(now){raf=0;if(!active)return;const delta=previous?Math.max(0,now-previous):0;previous=now;if(!visible){finish();return;}if(!paused())progress+=delta;
  const p=path,s=scene,t=progress;if(t>=p.end||(reduced.matches&&t>=p.talkEnd)){finish();return;}
  let xa=p.homeA,xb=p.homeB,fa,fb,pose='talking',talk=null;
- if(t<p.enter){pose='entering';const da=t/1000*p.speed;xa=Math.min(p.homeA,-p.size+da);fa=xa<p.homeA?walkFrame(s.a.walk,da):s.a.arrive[0];
-  if(s.b){xb=Math.max(p.homeB,p.width-da);fb=xb>p.homeB?walkFrame(s.b.walk,da):s.b.arrive[0];}}
+ let oa=1,ob=1;
+ if(t<p.enter){pose='entering';const da=t/1000*p.speed;
+  if(s.a.fade){xa=p.homeA;fa=s.a.arrive[0];oa=Math.max(0,Math.min(1,(t-p.enter+700)/700));}else{xa=Math.min(p.homeA,-p.size+da);fa=xa<p.homeA?walkFrame(s.a.walk,da):s.a.arrive[0];}
+  if(s.b){if(s.b.fade){xb=p.homeB;fb=s.b.arrive[0];ob=Math.max(0,Math.min(1,(t-p.enter+700)/700));}else{xb=Math.max(p.homeB,p.width-da);fb=xb>p.homeB?walkFrame(s.b.walk,da):s.b.arrive[0];}}}
  else if(t<p.enter+p.arrive){pose='arriving';fa=s.a.arrive[Math.min(s.a.arrive.length-1,Math.floor((t-p.enter)/260))];fb=s.b?.arrive[0];}
  else if(t<p.talkEnd){talk=p.talks.find(x=>t>=x.start&&t<x.end)||null;const step=Math.floor(t/650);
   if(!s.b){fa=reduced.matches?s.a.talk[0]:cycle(s.a.talk,step);}
   else{const aTalks=talk?.who==='A',jTalks=talk?.who==='J';fa=aTalks?cycle(s.a.talk,step):s.a.listen[0];fb=jTalks?cycle(s.b.talk,step):s.b.listen[0];}}
  else if(t<p.exit){pose='leaving';fa=(s.a.bye||s.a.leave||s.a.talk)[0];fb=s.b?.listen[0];}
- else{pose='exiting';const d=(t-p.exit)/1000*p.speed;xa=p.homeA+d;fa=walkFrame(s.a.exitWalk,d);if(s.b){xb=p.homeB-d;fb=walkFrame(s.b.exitWalk,d);}}
- host.dataset.pose=pose;frame(spriteA,fa);actorA.style.transform=`translate3d(${xa}px,0,0)`;
- if(s.b){frame(spriteB,fb);actorB.style.transform=`translate3d(${xb}px,0,0)`;}
+ else{pose='exiting';const d=(t-p.exit)/1000*p.speed,gone=Math.max(0,1-(t-p.exit)/700);
+  if(s.a.fade){fa=s.a.listen?.[0]||s.a.arrive[0];oa=gone;}else{xa=p.homeA+d;fa=walkFrame(s.a.exitWalk,d);}
+  if(s.b){if(s.b.fade){fb=s.b.listen[0];ob=gone;}else{xb=p.homeB-d;fb=walkFrame(s.b.exitWalk,d);}}}
+ host.dataset.pose=pose;frame(spriteA,fa);actorA.style.transform=`translate3d(${xa}px,0,0)`;actorA.style.opacity=oa;
+ if(s.b){frame(spriteB,fb);actorB.style.transform=`translate3d(${xb}px,0,0)`;actorB.style.opacity=ob;}
  const key=talk?talk.who+talk.text:'';if(key!==shown){shown=key;bubble.hidden=!talk;if(talk){const n=talk.who==='J'?s.b.name:s.a.name;nameTag.textContent=n+' · '+UI[lang()].tag;phrase.textContent=talk.text;bubble.dataset.speaker=talk.who;}}
  const idx=talk?p.talks.indexOf(talk):-1;
  if(talk&&saying!==idx&&!paused()&&ZeVoice.enabled&&t-talk.start>=150)speak(idx);
@@ -147,7 +153,7 @@ async function greet(){if(!ready||!visible||active||starting||paused())return;co
  starting=false;if(!visible||active||paused())return;
  scene=next;lastGreeting=performance.now();progress=0;previous=0;saying=-1;shown='';active=true;clearTimeout(returnTimer);
  host.classList.add('surf-ze-active');host.classList.toggle('surf-ze-duo',!!scene.b);actorB.hidden=!scene.b;host.setAttribute('aria-hidden','false');describe();
- frame(spriteA,scene.a.walk[0]);if(scene.b)frame(spriteB,scene.b.walk[0]);actorA.style.transform=actorB.style.transform='translate3d(-400px,0,0)';
+ frame(spriteA,(scene.a.walk||scene.a.arrive)[0]);if(scene.b)frame(spriteB,(scene.b.walk||scene.b.arrive)[0]);actorA.style.opacity=scene.a.fade?0:"";actorB.style.opacity=scene.b?.fade?0:"";actorA.style.transform=actorB.style.transform='translate3d(-400px,0,0)';
  requestAnimationFrame(()=>{path=plan();if(reduced.matches)progress=path.enter+path.arrive;if(!raf)raf=requestAnimationFrame(tick);});}
 
 const talkingNow=()=>active&&host.dataset.pose==='talking'?path.talks.findIndex(x=>progress>=x.start&&progress<x.end):-1;
