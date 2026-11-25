@@ -1,4 +1,4 @@
-"""Grava em mp3 toda fala nova que ainda não tem áudio: as do Zé (character-weather.js) e as da praia do
+"""(Também grava as falas do comercial, de scripts/comercial.json.) Grava em mp3 toda fala nova que ainda não tem áudio: as do Zé (character-weather.js) e as da praia do
 surfe (surf-falas.js), cada personagem com a sua voz. Roda no GitHub Actions, que tem acesso ao serviço de voz."""
 import asyncio, hashlib, json, re, subprocess, pathlib
 import edge_tts
