@@ -22,7 +22,12 @@
  {
   "id": "n1",
   "voz": "niko",
-  "texto": "Onda, swell e vento, tudo no mesmo lugar, brô!"
+  "texto": "Tamanho da onda, vento e céu, tudo no mesmo lugar!",
+  "edge": "pt-BR-AntonioNeural",
+  "ajuste": {
+   "pitch": "+16Hz",
+   "rate": "+10%"
+  }
  },
  {
   "id": "j1",
