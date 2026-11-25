@@ -1,9 +1,42 @@
 [
- {"id": "z1", "voz": "ze", "texto": "Oi! Eu sou o Zé. Antes de você sair de casa, eu olho o céu."},
- {"id": "z2", "voz": "ze", "texto": "Sol, chuva ou frio: eu me visto pro tempo de hoje, e você já sabe o que levar."},
- {"id": "z3", "voz": "ze", "texto": "Previsão hora a hora, quinze dias, chuva, vento e os alertas oficiais do INMET."},
- {"id": "b1", "voz": "brisa", "texto": "E pra quem surfa, tem dezesseis picos de surfe!"},
- {"id": "n1", "voz": "niko", "texto": "Onda, swell e vento, tudo no mesmo lugar, brô!"},
- {"id": "j1", "voz": "jorge", "texto": "Bora pro mar, Zé!"},
- {"id": "z4", "voz": "ze", "texto": "Tempo com Zé. É só entrar em tempocomze ponto com ponto bê erre. E é de graça!"}
+ {
+  "id": "z1",
+  "voz": "ze",
+  "texto": "Oi! Eu sou o Zé. Antes de você sair de casa, eu olho o céu."
+ },
+ {
+  "id": "z2",
+  "voz": "ze",
+  "texto": "Sol, chuva ou frio: eu me visto pro tempo de hoje, e você já sabe o que levar."
+ },
+ {
+  "id": "z3",
+  "voz": "ze",
+  "texto": "Previsão hora a hora, quinze dias, chuva, vento e os alertas oficiais do INMET."
+ },
+ {
+  "id": "b1",
+  "voz": "brisa",
+  "texto": "E pra quem surfa, tem dezesseis picos de surfe!"
+ },
+ {
+  "id": "n1",
+  "voz": "niko",
+  "texto": "Onda, swell e vento, tudo no mesmo lugar, brô!"
+ },
+ {
+  "id": "j1",
+  "voz": "jorge",
+  "texto": "Bora pro mar, Zé! Hoje tem onda!",
+  "edge": "pt-BR-AntonioNeural",
+  "ajuste": {
+   "pitch": "-22Hz",
+   "rate": "-8%"
+  }
+ },
+ {
+  "id": "z4",
+  "voz": "ze",
+  "texto": "Tempo com Zé. É só entrar em tempocomze ponto com ponto bê erre. E é de graça!"
+ }
 ]

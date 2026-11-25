@@ -87,12 +87,18 @@ async def comercial():
     for f in lista:
         destino = pasta / f"{f['id']}.mp3"
         texto_salvo = pasta / f"{f['id']}.txt"
-        if destino.exists() and texto_salvo.exists() and texto_salvo.read_text(encoding='utf-8') == f['texto']:
+        assinatura = f['texto'] + json.dumps([f.get('edge'), f.get('ajuste')])
+        if destino.exists() and texto_salvo.exists() and texto_salvo.read_text(encoding='utf-8') in (f['texto'], assinatura) and not f.get('edge'):
             continue
-        voz, ajuste = (m['voices']['pt'], {}) if f['voz'] == 'ze' else await escolher(f['voz'], 'pt')
+        if f.get('edge') and texto_salvo.exists() and texto_salvo.read_text(encoding='utf-8') == assinatura:
+            continue
+        if f.get('edge'):   # voz escolhida só para o comercial (ex.: Jorge em português nativo, mais fácil de entender)
+            voz, ajuste = f['edge'], f.get('ajuste', {})
+        else:
+            voz, ajuste = (m['voices']['pt'], {}) if f['voz'] == 'ze' else await escolher(f['voz'], 'pt')
         try:
             await gravar(f['texto'], voz, ajuste, destino)
-            texto_salvo.write_text(f['texto'], encoding='utf-8')
+            texto_salvo.write_text(assinatura if f.get('edge') else f['texto'], encoding='utf-8')
             print('comercial gravado', f['id'])
         except Exception as erro:
             print('comercial falhou', f['id'], erro)
