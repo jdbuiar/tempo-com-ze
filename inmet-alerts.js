@@ -64,23 +64,24 @@
   function box(){let el=document.getElementById('inmet-alerts');if(!el){el=document.createElement('section');el.id='inmet-alerts';el.className='inmet-alerts';el.setAttribute('aria-live','polite')}
     /* INMET always sits above the model-based storm banner */
     const anchor=document.getElementById('storm-alert')||document.getElementById('hoje');if(anchor&&el.nextElementSibling!==anchor)anchor.before(el);return el}
+  function card(a,t,full){
+    const tag=`<small>${esc(t.title)} · ${esc(a.futuro?t.next:t.today)}</small>
+          <strong>${esc(a.evento)} <em>${esc(a.severidade)}</em></strong>
+          <span>${esc(when(a.inicio))} ${esc(t.until)} ${esc(when(a.fim))}</span>`;
+    const more=`${a.riscos?.length?`<p>${esc(a.riscos.join(' '))}</p>`:''}
+          ${a.instrucoes?.length?`<details><summary>${esc(t.more)}</summary><ul>${a.instrucoes.map(i=>`<li>${esc(i.trim())}</li>`).join('')}</ul></details>`:''}
+          <a href="https://avisos.inmet.gov.br/" target="_blank" rel="noopener">${esc(t.source)}</a>`;
+    const color=/^#[0-9a-f]{6}$/i.test(a.cor)?a.cor:'#f2c94c';
+    /* The most important warning opens in full; the others stay as one line that opens on tap, so the forecast is not pushed off the screen */
+    if(full)return `<article class="inmet-alert" style="--alert:${color}"><div class="inmet-badge" aria-hidden="true">!</div><div class="inmet-body">${tag}${more}</div></article>`;
+    return `<details class="inmet-alert inmet-mini" style="--alert:${color}"><summary><div class="inmet-badge" aria-hidden="true">!</div><div class="inmet-body">${tag}</div><b class="inmet-open" aria-hidden="true">›</b></summary><div class="inmet-body inmet-rest">${more}</div></details>`;
+  }
   function render(items){
     const el=box();if(!el)return;
     if(!items.length){el.hidden=true;el.replaceChildren();return}
     const t=TXT[lang()];
     const head=items.length>1?`<p class="inmet-count">${esc(t.several(items.length))}</p>`:'';
-    el.innerHTML=head+items.map(a=>`
-      <article class="inmet-alert" style="--alert:${/^#[0-9a-f]{6}$/i.test(a.cor)?a.cor:'#f2c94c'}">
-        <div class="inmet-badge" aria-hidden="true">!</div>
-        <div class="inmet-body">
-          <small>${esc(t.title)} · ${esc(a.futuro?t.next:t.today)}</small>
-          <strong>${esc(a.evento)} <em>${esc(a.severidade)}</em></strong>
-          <span>${esc(when(a.inicio))} ${esc(t.until)} ${esc(when(a.fim))}</span>
-          ${a.riscos?.length?`<p>${esc(a.riscos.join(' '))}</p>`:''}
-          ${a.instrucoes?.length?`<details><summary>${esc(t.more)}</summary><ul>${a.instrucoes.map(i=>`<li>${esc(i.trim())}</li>`).join('')}</ul></details>`:''}
-          <a href="https://avisos.inmet.gov.br/" target="_blank" rel="noopener">${esc(t.source)}</a>
-        </div>
-      </article>`).join('');
+    el.innerHTML=head+items.map((a,i)=>card(a,t,i===0)).join('');
     el.hidden=false;
   }
 
@@ -110,7 +111,9 @@
       let now;try{now=city}catch{return}
       if(now!==c)return;
       lastKey=key;
-      const items=[...avisos].sort((x,y)=>(x.futuro-y.futuro)||(y.nivel-x.nivel)).slice(0,3);
+      /* INMET often issues the same event twice for a place (Perigo and Perigo Potencial): keep only the strongest per event and day */
+      const best=new Map();for(const a of avisos){const k=`${String(a.evento).toLowerCase()}|${a.futuro?1:0}|${String(a.inicio).slice(0,10)}`,o=best.get(k);if(!o||a.nivel>o.nivel)best.set(k,a)}
+      const items=[...best.values()].sort((x,y)=>(x.futuro-y.futuro)||(y.nivel-x.nivel)).slice(0,3);
       render(items);decideZe(avisos);
       window.aquaInmetAlerts=avisos;
     }catch{/* INMET offline: keep the page as it is, without inventing warnings */}
