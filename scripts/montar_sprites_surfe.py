@@ -193,7 +193,7 @@ def foot_steps(atlas_frames, face, cell):
 STEPS = {}
 
 
-def walk(name, ratio, face, mirror=False, cell=256):
+def walk(name, ratio, face, mirror=False, cell=256, part=0.35):
     """Ciclo de 24 quadros (6 x 4). face: 1 anda para a direita, -1 para a esquerda (depois do espelho)."""
     found = pieces(SRC / f'walk-{name}.png')
     assert len(found) == 24, (name, len(found))
@@ -205,7 +205,7 @@ def walk(name, ratio, face, mirror=False, cell=256):
         for p in order:
             p['img'] = p['img'][:, ::-1].copy()
     scale = ratio * cell / float(np.median([p['h'] for p in order]))
-    frames = [place(p['img'], scale, cell, torso_x) for p in order]
+    frames = [place(p['img'], scale, cell, lambda img: torso_x(img, part)) for p in order]
     save(frames, 6, cell, f'surf-walk-{name}.webp')
     STEPS[name] = foot_steps(frames, face, cell)
 
@@ -240,14 +240,13 @@ def reanchor(src, cols, rows, out):
 if (SRC / 'ze-surf-walk-10-original.webp').exists():
     zs, zc = reanchor(SRC / 'ze-surf-walk-10-original.webp', 5, 2, 'ze-surf-walk-10.webp')
     STEPS['ze-surf'] = foot_steps(zs, 1, zc)
-STEPS['niko'] = foot_steps(niko_frames[:10], 1, 300)
 
 ratios['jorge'] = JORGE
 # (nome do arquivo walk-NOME.png, proporção do personagem, sentido em que anda no site, espelhar?)
-CICLOS = [('ze', 'ze', 1, False), ('brisa', 'brisa', 1, False), ('jorge', 'jorge', -1, False),
+CICLOS = [('ze', 'ze', 1, False), ('brisa', 'brisa', 1, False), ('jorge', 'jorge', -1, False), ('niko', 'niko', 1, False),
           ('jorge-chuva', 'jorge', -1, False), ('jorge-frio', 'jorge', -1, False)]
 for name, who, face, mirror in CICLOS:
     if (SRC / f'walk-{name}.png').exists():
-        walk(name, ratios[who], face, mirror)
+        walk(name, ratios[who], face, mirror, part=0.16 if who == 'niko' else 0.35)  # Niko: prancha na altura do tronco
 import json
 print('STEPS para surf-ze.js:', json.dumps(STEPS, separators=(',', ':')))

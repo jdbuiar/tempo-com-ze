@@ -17,6 +17,7 @@ const ATLAS={
  walkZe:{src:'assets/surf-walk-ze.webp',cols:6,rows:4},
  walkJorge:{src:'assets/surf-walk-jorge.webp',cols:6,rows:4},
  walkBrisa:{src:'assets/surf-walk-brisa.webp',cols:6,rows:4},
+ walkNiko:{src:'assets/surf-walk-niko.webp',cols:6,rows:4},
  walkJorgeRain:{src:'assets/surf-walk-jorge-chuva.webp',cols:6,rows:4},
  walkJorgeCold:{src:'assets/surf-walk-jorge-frio.webp',cols:6,rows:4}
 };
@@ -28,8 +29,8 @@ const walk=(atlas,list,step)=>Object.assign(seq(atlas,list),{step});
 const range=n=>Array.from({length:n},(_,i)=>i);
 /* per-frame advance (fraction of the sprite box), measured by following the foot on the ground from one
    frame to the next; the drawings are not perfectly even, so one number per frame keeps the feet planted */
-const STEPS={"ze-surf":[0.0164,0.0158,0.0152,0.0158,0.0164,0.0167,0.017,0.0167,0.0164,0.0164],"ze":[0.021,0.022,0.0264,0.0283,0.0273,0.0229,0.0146,0.0161,0.022,0.0225,0.02,0.0132,0.0146,0.0249,0.0234,0.0151,0.0142,0.0122,0.0127,0.0205,0.022,0.0166,0.0142,0.0181],"brisa":[0.0171,0.0234,0.0312,0.0327,0.0303,0.0234,0.0186,0.021,0.0176,0.0107,0.0186,0.0269,0.0264,0.0308,0.0352,0.0322,0.0264,0.0254,0.0273,0.0254,0.0234,0.02,0.0161,0.0161],"jorge":[0.0206,0.0261,0.0226,0.0234,0.0205,0.0132,0.0197,0.0295,0.028,0.0234,0.0205,0.0166,0.0201,0.0242,0.0227,0.0217,0.0148,0.0153,0.0277,0.0321,0.028,0.0195,0.0093,0.0093],"jorge-chuva":[0.0171,0.0244,0.0205,0.019,0.022,0.0181,0.0171,0.0225,0.0229,0.0239,0.0244,0.0181,0.0171,0.0186,0.0156,0.0176,0.0161,0.0151,0.0239,0.0273,0.0254,0.021,0.0093,0.0059],"jorge-frio":[0.0222,0.0327,0.0305,0.0278,0.022,0.0122,0.0183,0.0249,0.022,0.0264,0.03,0.0278,0.0271,0.0308,0.03,0.0244,0.0229,0.0276,0.0349,0.0349,0.0251,0.0176,0.0137,0.0117]};
-const WALK={ze:walk('walkZe',range(24),STEPS.ze),jorge:walk('walkJorge',range(24),STEPS.jorge),brisa:walk('walkBrisa',range(24),STEPS.brisa),niko:walk('niko',range(10),.019),/* Niko's sheet is not an even cycle; average step */
+const STEPS={"ze-surf":[0.0164,0.0158,0.0152,0.0158,0.0164,0.0167,0.017,0.0167,0.0164,0.0164],"ze":[0.021,0.022,0.0264,0.0283,0.0273,0.0229,0.0146,0.0161,0.022,0.0225,0.02,0.0132,0.0146,0.0249,0.0234,0.0151,0.0142,0.0122,0.0127,0.0205,0.022,0.0166,0.0142,0.0181],"brisa":[0.0171,0.0234,0.0312,0.0327,0.0303,0.0234,0.0186,0.021,0.0176,0.0107,0.0186,0.0269,0.0264,0.0308,0.0352,0.0322,0.0264,0.0254,0.0273,0.0254,0.0234,0.02,0.0161,0.0161],"jorge":[0.0206,0.0261,0.0226,0.0234,0.0205,0.0132,0.0197,0.0295,0.028,0.0234,0.0205,0.0166,0.0201,0.0242,0.0227,0.0217,0.0148,0.0153,0.0277,0.0321,0.028,0.0195,0.0093,0.0093],"niko":[0.0299,0.0315,0.0153,0.0133,0.0247,0.0265,0.0266,0.0276,0.0203,0.0142,0.0203,0.0291,0.035,0.0389,0.0302,0.0208,0.0256,0.0284,0.0309,0.0291,0.0167,0.0132,0.0132,0.0161],"jorge-chuva":[0.0171,0.0244,0.0205,0.019,0.022,0.0181,0.0171,0.0225,0.0229,0.0239,0.0244,0.0181,0.0171,0.0186,0.0156,0.0176,0.0161,0.0151,0.0239,0.0273,0.0254,0.021,0.0093,0.0059],"jorge-frio":[0.0222,0.0327,0.0305,0.0278,0.022,0.0122,0.0183,0.0249,0.022,0.0264,0.03,0.0278,0.0271,0.0308,0.03,0.0244,0.0229,0.0276,0.0349,0.0349,0.0251,0.0176,0.0137,0.0117]};
+const WALK={ze:walk('walkZe',range(24),STEPS.ze),jorge:walk('walkJorge',range(24),STEPS.jorge),brisa:walk('walkBrisa',range(24),STEPS.brisa),niko:walk('walkNiko',range(24),STEPS.niko),
  jorgeRain:walk('walkJorgeRain',range(24),STEPS['jorge-chuva']),jorgeCold:walk('walkJorgeCold',range(24),STEPS['jorge-frio'])};
 /* which outfit rows have a walk cycle that matches the chat pose (0 mild, 1 rain, 2 cold, 3 hot) */
 const JORGE_WALK=[WALK.jorge,WALK.jorgeRain,WALK.jorgeCold,null],ZE_WALK=[WALK.ze,null,null,null];
@@ -85,12 +86,12 @@ let scene=null;
 function build(id){
  const l=lang(),row=weatherRow(),w=WEATHER[row];
  if(id==='ze'){const i=pickIndex('ze-surf-lines-v1',ZE_LINES.pt.length);return {id,a:ACTOR.ze,voice:true,lines:[['A',ZE_LINES[l][i]]],line:i,atlases:['zeWalk','zeGreet']};}
- if(id==='niko'||id==='brisa'){const pool=SOLO_LINES[id][l],i=pickIndex('ze-surf-'+id+'-v1',pool.length);return {id,a:ACTOR[id],lines:pool[i].map(t=>['A',t]),line:i,atlases:id==='brisa'?['brisa','walkBrisa']:['niko']};}
+ if(id==='niko'||id==='brisa'){const pool=SOLO_LINES[id][l],i=pickIndex('ze-surf-'+id+'-v1',pool.length);return {id,a:ACTOR[id],lines:pool[i].map(t=>['A',t]),line:i,atlases:id==='brisa'?['brisa','walkBrisa']:['niko','walkNiko']};}
  const who=id==='duoZe'?'ze':id==='duoNiko'?'niko':'brisa',atlas=id;
  const chats=(who==='ze'?ZE_CHATS:SURF_CHATS)[l][w],i=pickIndex('ze-surf-'+id+'-'+w+'-v1',chats.length);
  return {id,who,row,weather:w,line:i,a:duoActor(atlas,ACTOR[who].name,row,false,who),b:duoActor(atlas,'JORGE',row,true),lines:chats[i].map(([s,t])=>[s,t.replace('{A}',ACTOR[who].name[0]+ACTOR[who].name.slice(1).toLowerCase())]),atlases:[...new Set([atlas,...[...scene_walks(who,row)]])]};
 }
-function scene_walks(who,row){const w=[];if(who==='brisa')w.push('walkBrisa');if(who==='niko')w.push('niko');w.push(['walkJorge','walkJorgeRain','walkJorgeCold'][row]);if(who==='ze'&&row===0)w.push('walkZe');return w.filter(Boolean);}
+function scene_walks(who,row){const w=[];if(who==='brisa')w.push('walkBrisa');if(who==='niko')w.push('walkNiko');w.push(['walkJorge','walkJorgeRain','walkJorgeCold'][row]);if(who==='ze'&&row===0)w.push('walkZe');return w.filter(Boolean);}
 /* Re-read the lines in the new language without changing the chosen chat. */
 function relabel(){if(!scene)return;const l=lang();
  if(scene.id==='ze')scene.lines=[['A',ZE_LINES[l][scene.line]]];
