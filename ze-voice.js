@@ -16,13 +16,13 @@ function enable(){
 }
 function activateFromPage(event){if(!event.isTrusted||document.visibilityState!=='visible')return;if(event.type==='keydown'&&['Shift','Control','Alt','Meta','Tab','Escape'].includes(event.key))return;enable();}
 for(const event of ['pointerup','touchend','click','keydown'])document.addEventListener(event,activateFromPage,{capture:true,passive:true});
-function utterance(text){return {text,lang:'pt-BR',volume:.85,onstart:null,onend:null,onerror:null};}
+function utterance(text,voice){return {text,voice:voice||null,lang:'pt-BR',volume:.85,onstart:null,onend:null,onerror:null};}
 async function speak(line){
  if(!enabled){if(navigator.userActivation?.isActive){if(!await enable()){line.onerror?.({error:'not-allowed'});return;}}else{line.onerror?.({error:'not-allowed'});return;}}
  cancel();const id=serial;
  try{
   const data=await manifest();if(id!==serial)return;
-  const clips=data.clips[line.lang.split('-')[0]]||{};/* a longer line still plays the recorded part it starts with */const src=clips[line.text]||clips[Object.keys(clips).filter(k=>line.text.startsWith(k)).sort((a,b)=>b.length-a.length)[0]];if(!src)throw Error('Recorded line unavailable');
+  const lang=line.lang.split('-')[0];/* surf characters (Niko, Brisa, Jorge, Zé on the beach) have their own recordings */const clips=line.voice?(data.surf?.[lang]?.[line.voice]||{}):(data.clips[lang]||{});/* a longer line still plays the recorded part it starts with */const src=clips[line.text]||(line.voice?null:clips[Object.keys(clips).filter(k=>line.text.startsWith(k)).sort((a,b)=>b.length-a.length)[0]]);if(!src)throw Error('Recorded line unavailable');
   detach();player.src=src;player.volume=Math.max(0,Math.min(1,line.volume??.85));player.playbackRate=1;player.defaultPlaybackRate=1;player.dataset.state='loading';
   const item={utterance:line,timer:null};current=item;
   const fail=error=>{if(id!==serial||current!==item)return;current=null;clearTimeout(item.timer);detach();player.dataset.state='error';line.onerror?.({error});};

@@ -1,5 +1,5 @@
-"""Grava em mp3 toda fala nova do Zé (character-weather.js) que ainda não tem áudio.
-Roda no GitHub Actions, que tem acesso ao serviço de voz. Usa as mesmas vozes do manifest."""
+"""Grava em mp3 toda fala nova que ainda não tem áudio: as do Zé (character-weather.js) e as da praia do
+surfe (surf-falas.js), cada personagem com a sua voz. Roda no GitHub Actions, que tem acesso ao serviço de voz."""
 import asyncio, hashlib, json, re, subprocess, pathlib
 import edge_tts
 
@@ -12,8 +12,63 @@ falas = json.loads(subprocess.check_output(['node', '-e',
     cwd=RAIZ, text=True))
 m = json.loads(MANIFEST.read_text(encoding='utf-8'))
 
-async def main():
+# Vozes da praia: a primeira que o serviço aceitar vira a voz fixa do personagem naquele idioma.
+CANDIDATAS = {
+    'ze':    {'pt': [('pt-BR-AntonioNeural', {})], 'es': [('es-ES-AlvaroNeural', {})], 'en': [('en-US-GuyNeural', {})]},
+    'brisa': {'pt': [('pt-BR-FranciscaNeural', {}), ('pt-BR-ThalitaMultilingualNeural', {})],
+              'es': [('es-ES-ElviraNeural', {})], 'en': [('en-US-AriaNeural', {}), ('en-US-JennyNeural', {})]},
+    'niko':  {'pt': [('pt-BR-JulioNeural', {}), ('pt-BR-NicolauNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '+10Hz', 'rate': '+6%'})],
+              'es': [('es-AR-TomasNeural', {}), ('es-ES-AlvaroNeural', {'pitch': '+10Hz', 'rate': '+6%'})],
+              'en': [('en-AU-WilliamNeural', {}), ('en-US-AndrewNeural', {})]},
+    'jorge': {'pt': [('pt-BR-DonatoNeural', {}), ('pt-BR-FabioNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
+              'es': [('es-MX-JorgeNeural', {}), ('es-ES-AlvaroNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
+              'en': [('en-US-ChristopherNeural', {}), ('en-US-EricNeural', {})]},
+}
+SURF = PASTA / 'surf'
+
+
+async def gravar(texto, voz, ajuste, destino):
+    await edge_tts.Communicate(texto, voz, **ajuste).save(str(destino))
+    if destino.stat().st_size < 1000:
+        raise RuntimeError('áudio vazio')
+
+
+async def escolher(quem, lang):
+    salvo = m.setdefault('surfVoices', {}).setdefault(quem, {}).get(lang)
+    if salvo:
+        return salvo['voice'], salvo.get('opts', {})
+    for voz, ajuste in CANDIDATAS[quem][lang]:
+        try:
+            await gravar('Olá' if lang == 'pt' else 'Hola' if lang == 'es' else 'Hello', voz, ajuste, SURF / 'teste.mp3')
+            m['surfVoices'][quem][lang] = {'voice': voz, 'opts': ajuste}
+            print('voz escolhida', quem, lang, voz, ajuste)
+            return voz, ajuste
+        except Exception as erro:
+            print('voz indisponível', voz, erro)
+    raise RuntimeError(f'nenhuma voz para {quem} em {lang}')
+
+
+async def praia():
+    falas_praia = json.loads(subprocess.check_output(['node', '-e',
+        "console.log(JSON.stringify(require('./surf-falas.js').allLines()))"], cwd=RAIZ, text=True))
+    SURF.mkdir(exist_ok=True)
     novas = 0
+    for f in falas_praia:
+        clips = m.setdefault('surf', {}).setdefault(f['lang'], {}).setdefault(f['voice'], {})
+        if f['text'] in clips:
+            continue
+        voz, ajuste = await escolher(f['voice'], f['lang'])
+        nome = f"{f['voice']}-{f['lang']}-{hashlib.sha1(f['text'].encode()).hexdigest()[:8]}.mp3"
+        await gravar(f['text'], voz, ajuste, SURF / nome)
+        clips[f['text']] = f"assets/ze-voice-natural/surf/{nome}"
+        novas += 1
+        print('gravada', f['voice'], f['lang'], f['text'])
+    (SURF / 'teste.mp3').unlink(missing_ok=True)
+    return novas
+
+
+async def main():
+    novas = await praia()
     for lang, lista in falas.items():
         clips = m['clips'].setdefault(lang, {})
         for texto in lista:

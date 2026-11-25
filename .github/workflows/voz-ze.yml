@@ -2,7 +2,7 @@ name: Gravar voz do Zé
 on:
   push:
     branches: [main]
-    paths: [character-weather.js, scripts/gravar_voz.py, .github/workflows/voz-ze.yml]
+    paths: [character-weather.js, surf-falas.js, scripts/gravar_voz.py, .github/workflows/voz-ze.yml]
   workflow_dispatch:
 permissions:
   contents: write
@@ -22,6 +22,6 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -A
-            git commit -m "Voz do Zé: grava as falas novas"
+            git commit -m "Voz: grava as falas novas"
             git push
           fi
