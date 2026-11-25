@@ -24,7 +24,10 @@ const seq=(atlas,list)=>list.map(i=>[atlas,i]);
    measured from the drawings (scripts/montar_sprites_surfe.py) so the feet don't slide */
 const walk=(atlas,list,step)=>Object.assign(seq(atlas,list),{step});
 const range=n=>Array.from({length:n},(_,i)=>i);
-const WALK={ze:walk('walkZe',range(24),.0212),jorge:walk('walkJorge',range(24),.0275),brisa:walk('walkBrisa',range(24),.0292),niko:walk('niko',range(10),.035)};
+/* per-frame advance (fraction of the sprite box), measured by following the foot on the ground from one
+   frame to the next; the drawings are not perfectly even, so one number per frame keeps the feet planted */
+const STEPS={"brisa":[0.0171,0.0234,0.0312,0.0327,0.0303,0.0234,0.0189,0.0221,0.0187,0.0111,0.0186,0.0269,0.0273,0.0376,0.0459,0.0371,0.0264,0.0254,0.0273,0.0254,0.0234,0.02,0.0161,0.0161],"ze":[0.0224,0.0234,0.0308,0.0327,0.0322,0.0298,0.0181,0.022,0.0337,0.0293,0.022,0.0142,0.0288,0.0581,0.0474,0.02,0.0142,0.0122,0.0127,0.0205,0.022,0.0166,0.0155,0.0208],"jorge":[0.0298,0.0444,0.0317,0.0234,0.0205,0.0132,0.0269,0.0439,0.0352,0.0234,0.0205,0.0166,0.0283,0.0405,0.0312,0.0225,0.0151,0.0225,0.0464,0.0479,0.0322,0.0195,0.0093,0.0093]};
+const WALK={ze:walk('walkZe',range(24),STEPS.ze),jorge:walk('walkJorge',range(24),STEPS.jorge),brisa:walk('walkBrisa',range(24),STEPS.brisa),niko:walk('niko',range(10),.035)};
 const ACTOR={
  ze:{name:'ZÉ',walk:seq('zeWalk',[0,1,2,3,4,5,6,7,8,9]),arrive:seq('zeGreet',[0,1]),talk:seq('zeGreet',[2]),exitWalk:seq('zeWalk',[0,1,2,3,4,5,6,7,8,9])},
  niko:{name:'NIKO',walk:WALK.niko,arrive:seq('niko',[10,11,12,12]),talk:seq('niko',[13,14,16,17,18,15]),bye:seq('niko',[19]),exitWalk:WALK.niko},
@@ -113,7 +116,9 @@ function speak(idx){const talk=path?.talks[idx];if(!supported||!visible||!talk||
 function stretch(idx,at){const p=path,talk=p.talks[idx];if(!talk||at<=talk.end)return;const extra=at-talk.end;talk.end+=extra;for(const later of p.talks.slice(idx+1)){later.start+=extra;later.end+=extra;}p.talkEnd+=extra;p.exit+=extra;p.end+=extra;}
 function finish(){if(active&&visible){clearTimeout(returnTimer);returnTimer=setTimeout(greet,GAP);}active=false;previous=0;stopVoice();bubble.hidden=true;shown='';host.classList.remove('surf-ze-active','surf-ze-duo');actorB.hidden=true;host.dataset.pose='waiting';host.setAttribute('aria-hidden','true');}
 /* gait follows distance: long cycles span one stride, short ones change every ~18% of the body size */
-function walkFrame(list,distance){const step=path.size*(list.step||.74/list.length);return cycle(list,Math.floor(Math.max(0,distance)/step));}
+function walkFrame(list,distance){const s=list.step||.74/list.length,u=Math.max(0,distance)/path.size;
+ if(!Array.isArray(s))return cycle(list,Math.floor(u/s));
+ const total=s.reduce((x,y)=>x+y,0);let r=u%total,i=0;while(i<s.length-1&&r>=s[i]){r-=s[i];i++;}return list[i];}
 function tick(now){raf=0;if(!active)return;const delta=previous?Math.max(0,now-previous):0;previous=now;if(!visible){finish();return;}if(!paused())progress+=delta;
  const p=path,s=scene,t=progress;if(t>=p.end||(reduced.matches&&t>=p.talkEnd)){finish();return;}
  let xa=p.homeA,xb=p.homeB,fa,fb,pose='talking',talk=null;
