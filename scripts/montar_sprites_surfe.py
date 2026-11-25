@@ -9,6 +9,9 @@ niko-solo.png, brisa-solo.png e mar.png. Gera em assets/:
      linhas: 0 meia estação, 1 chuva, 2 frio, 3 calor
   surf-niko.webp, surf-brisa.webp  (8 colunas x 3 linhas, quadros 1-24)
   surf-mar.webp  (24 faixas de mar empilhadas: 12 de ida e 12 de volta)
+  surf-walk-ze.webp, surf-walk-jorge.webp, surf-walk-brisa.webp  (ciclos de 24 quadros, 6 x 4)
+     opcionais: walk-ze.png, walk-jorge.png, walk-brisa.png na pasta das folhas
+O script imprime o passo por quadro de cada caminhada (fração do quadro); esses números vão em surf-ze.js.
 """
 import sys
 from pathlib import Path
@@ -66,12 +69,20 @@ def feet_x(img):
     return (xs.min() + xs.max()) / 2 if len(xs) else a.shape[1] / 2
 
 
-def place(img, scale, cell):
+def torso_x(img):
+    """Centro da cabeça e do tronco (35% de cima): numa caminhada o corpo fica parado e as pernas mexem."""
+    a = img[:, :, 3] > 40
+    top = a[:int(a.shape[0] * 0.35)]
+    xs = np.where(top.any(0))[0]
+    return (xs.min() + xs.max()) / 2
+
+
+def place(img, scale, cell, anchor=None):
     """Coloca o recorte no quadro: pés centralizados e apoiados em FEET."""
     h, w = img.shape[:2]
     pic = Image.fromarray(img).resize((max(1, round(w * scale)), max(1, round(h * scale))), Image.LANCZOS)
     canvas = Image.new('RGBA', (cell, cell))
-    left = round(cell / 2 - feet_x(img) * scale)
+    left = round(cell / 2 - (anchor or feet_x)(img) * scale)
     top = round(cell * FEET - pic.height)
     if left < 0 or top < 0 or left + pic.width > cell:
         print('  aviso: recorte encostou na borda', left, top, pic.width, cell)
@@ -145,6 +156,30 @@ def sea():
     print('surf-mar.webp', atlas.size, 'faixa', pitch, round((OUT / 'surf-mar.webp').stat().st_size / 1024), 'KB')
 
 
+def step_per_frame(order, frames_per_cycle):
+    """Passo por quadro: no ciclo, a maior abertura entre os pés menos o tamanho de um pé é um passo;
+    um ciclo tem dois passos. Devolve em fração da altura do personagem."""
+    spread = []
+    for p in order:
+        a = p['img'][:, :, 3] > 40
+        cols = np.where(a[int(a.shape[0] * 0.93):].any(0))[0]
+        spread.append(cols.max() - cols.min())
+    step = (np.percentile(spread, 95) - np.percentile(spread, 10)) / float(np.median([p['h'] for p in order]))
+    return 2 * step / frames_per_cycle
+
+
+def walk(name, ratio, cell=256):
+    found = pieces(SRC / f'walk-{name}.png')
+    assert len(found) == 24, (name, len(found))
+    rows = sorted(found, key=lambda p: p['y0'])
+    order = []
+    for r in range(4):
+        order += sorted(rows[r * 6:(r + 1) * 6], key=lambda p: p['x0'])
+    scale = ratio * cell / float(np.median([p['h'] for p in order]))
+    save([place(p['img'], scale, cell, torso_x) for p in order], 6, cell, f'surf-walk-{name}.webp')
+    print(f'  passo {name}: {step_per_frame(order, 24) * ratio:.4f} do quadro por quadro')
+
+
 ratios = {}
 for who in ['ze', 'niko', 'brisa']:
     frames, ratios[who] = duo(f'duo-{who}-jorge.png')
@@ -152,3 +187,10 @@ for who in ['ze', 'niko', 'brisa']:
 save(solo('niko-solo.png', 8, ratios['niko']), 8, 300, 'surf-niko.webp')
 save(solo('brisa-solo.png', 6, ratios['brisa']), 8, 300, 'surf-brisa.webp')
 sea()
+ratios['jorge'] = JORGE
+for who in ['ze', 'jorge', 'brisa']:
+    if (SRC / f'walk-{who}.png').exists():
+        walk(who, ratios[who])
+niko = pieces(SRC / 'niko-solo.png')
+niko = sorted([p for p in niko if p['h'] > 120], key=lambda p: (p['y0'] // 200, p['x0']))
+print(f"  passo niko (quadros 1-10, ciclo de 10): {step_per_frame(niko[:10], 10) * ratios['niko']:.4f} do quadro por quadro")

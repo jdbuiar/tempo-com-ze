@@ -13,16 +13,28 @@ const ATLAS={
  brisa:{src:'assets/surf-brisa.webp',cols:8,rows:3},
  duoZe:{src:'assets/surf-duo-ze.webp',cols:12,rows:4},
  duoNiko:{src:'assets/surf-duo-niko.webp',cols:12,rows:4},
- duoBrisa:{src:'assets/surf-duo-brisa.webp',cols:12,rows:4}
+ duoBrisa:{src:'assets/surf-duo-brisa.webp',cols:12,rows:4},
+ walkZe:{src:'assets/surf-walk-ze.webp',cols:6,rows:4},
+ walkJorge:{src:'assets/surf-walk-jorge.webp',cols:6,rows:4},
+ walkBrisa:{src:'assets/surf-walk-brisa.webp',cols:6,rows:4}
 };
 /* Each actor: walk cycle, arrival poses, talk loop and exit walk, as [atlas,index] frames. */
 const seq=(atlas,list)=>list.map(i=>[atlas,i]);
+/* walk cycles carry their step: how far the body moves per frame, as a fraction of the sprite box,
+   measured from the drawings (scripts/montar_sprites_surfe.py) so the feet don't slide */
+const walk=(atlas,list,step)=>Object.assign(seq(atlas,list),{step});
+const range=n=>Array.from({length:n},(_,i)=>i);
+const WALK={ze:walk('walkZe',range(24),.0212),jorge:walk('walkJorge',range(24),.0275),brisa:walk('walkBrisa',range(24),.0292),niko:walk('niko',range(10),.035)};
 const ACTOR={
  ze:{name:'ZÉ',walk:seq('zeWalk',[0,1,2,3,4,5,6,7,8,9]),arrive:seq('zeGreet',[0,1]),talk:seq('zeGreet',[2]),exitWalk:seq('zeWalk',[0,1,2,3,4,5,6,7,8,9])},
- niko:{name:'NIKO',walk:seq('niko',[0,1,2,3,4,5,6,7,8,9]),arrive:seq('niko',[10,11,12,12]),talk:seq('niko',[13,14,16,17,18,15]),bye:seq('niko',[19]),exitWalk:seq('niko',[20,21,22,23])},
- brisa:{name:'BRISA',walk:seq('brisa',[0,1,2,3,4,5,6,7]),arrive:seq('brisa',[8,9,18,19]),talk:seq('brisa',[20,21,22,23,21]),leave:seq('brisa',[18]),exitWalk:seq('brisa',[0,1,2,3,4,5,6,7])}
+ niko:{name:'NIKO',walk:WALK.niko,arrive:seq('niko',[10,11,12,12]),talk:seq('niko',[13,14,16,17,18,15]),bye:seq('niko',[19]),exitWalk:WALK.niko},
+ brisa:{name:'BRISA',walk:WALK.brisa,arrive:seq('brisa',[18,19]),talk:seq('brisa',[20,21,22,23,21]),leave:seq('brisa',[18]),exitWalk:WALK.brisa}
 };
-const duoActor=(atlas,name,row,jorge)=>{const o=(jorge?6:0)+row*12;return {name,walk:seq(atlas,[o,o+1,o+5]),arrive:seq(atlas,[jorge?o+4:o+2]),listen:seq(atlas,[o+4]),talk:seq(atlas,jorge?[o+2,o+3]:[o+3,o+2]),exitWalk:seq(atlas,[o,o+1,o+5])};};
+/* Smooth 24-frame cycles where we have them (Brisa and Niko always; Zé and Jorge in the mild-weather outfit);
+   the other outfits still use the three walking poses from the chat sheet. */
+const duoActor=(atlas,name,row,jorge,who)=>{const o=(jorge?6:0)+row*12,key=jorge?'jorge':who;
+ const smooth=key==='brisa'||key==='niko'||row===0?WALK[key]:walk(atlas,[o,o+1,o+5],.06);
+ return {name,walk:smooth,arrive:seq(atlas,[jorge?o+4:o+2]),listen:seq(atlas,[o+4]),talk:seq(atlas,jorge?[o+2,o+3]:[o+3,o+2]),exitWalk:smooth};};
 
 /* Jorge's outfit (and Zé's street clothes) follow the sky shown on the main forecast. */
 function weatherRow(){const v=document.querySelector('[data-variant]')?.dataset.variant;return v==='sunny'?3:['rain','drizzle','storm'].includes(v)?1:v==='cold'?2:0;}
@@ -62,11 +74,12 @@ let scene=null;
 function build(id){
  const l=lang(),row=weatherRow(),w=WEATHER[row];
  if(id==='ze'){const i=pickIndex('ze-surf-lines-v1',ZE_LINES.pt.length);return {id,a:ACTOR.ze,voice:true,lines:[['A',ZE_LINES[l][i]]],line:i,atlases:['zeWalk','zeGreet']};}
- if(id==='niko'||id==='brisa'){const pool=SOLO_LINES[id][l],i=pickIndex('ze-surf-'+id+'-v1',pool.length);return {id,a:ACTOR[id],lines:pool[i].map(t=>['A',t]),line:i,atlases:[id]};}
+ if(id==='niko'||id==='brisa'){const pool=SOLO_LINES[id][l],i=pickIndex('ze-surf-'+id+'-v1',pool.length);return {id,a:ACTOR[id],lines:pool[i].map(t=>['A',t]),line:i,atlases:id==='brisa'?['brisa','walkBrisa']:['niko']};}
  const who=id==='duoZe'?'ze':id==='duoNiko'?'niko':'brisa',atlas=id;
  const chats=(who==='ze'?ZE_CHATS:SURF_CHATS)[l][w],i=pickIndex('ze-surf-'+id+'-'+w+'-v1',chats.length);
- return {id,who,row,weather:w,line:i,a:duoActor(atlas,ACTOR[who].name,row,false),b:duoActor(atlas,'JORGE',row,true),lines:chats[i].map(([s,t])=>[s,t.replace('{A}',ACTOR[who].name[0]+ACTOR[who].name.slice(1).toLowerCase())]),atlases:[atlas]};
+ return {id,who,row,weather:w,line:i,a:duoActor(atlas,ACTOR[who].name,row,false,who),b:duoActor(atlas,'JORGE',row,true),lines:chats[i].map(([s,t])=>[s,t.replace('{A}',ACTOR[who].name[0]+ACTOR[who].name.slice(1).toLowerCase())]),atlases:[...new Set([atlas,...[...scene_walks(who,row)]])]};
 }
+function scene_walks(who,row){const w=[];if(who==='brisa')w.push('walkBrisa');if(who==='niko')w.push('niko');if(row===0){w.push('walkJorge');if(who==='ze')w.push('walkZe');}return w;}
 /* Re-read the lines in the new language without changing the chosen chat. */
 function relabel(){if(!scene)return;const l=lang();
  if(scene.id==='ze')scene.lines=[['A',ZE_LINES[l][scene.line]]];
@@ -80,7 +93,7 @@ function describe(){if(!scene)return;const u=UI[lang()],names=[scene.a.name,scen
 function plan(){
  const s=scene,size=actorA.offsetWidth,width=host.clientWidth,duo=!!s.b;
  const homeA=duo?width/2-size*.78:(width-size)/2,homeB=width/2-size*.22;
- const speed=size*(duo?.62:.8),enter=Math.max((homeA+size)/speed,duo?(width-homeB)/speed:0)*1000;
+ const speed=size*(duo?.5:.7),enter=Math.max((homeA+size)/speed,duo?(width-homeB)/speed:0)*1000;
  const arrive=(s.a.arrive.length*260);
  const talks=[];let t=enter+arrive;for(const [who,text] of s.lines){const d=lineTime(text);talks.push({who,text,start:t,end:t+d});t+=d+280;}
  const exit=t+(s.a.bye?650:s.a.leave?300:0);
@@ -100,7 +113,7 @@ function speak(idx){const talk=path?.talks[idx];if(!supported||!visible||!talk||
 function stretch(idx,at){const p=path,talk=p.talks[idx];if(!talk||at<=talk.end)return;const extra=at-talk.end;talk.end+=extra;for(const later of p.talks.slice(idx+1)){later.start+=extra;later.end+=extra;}p.talkEnd+=extra;p.exit+=extra;p.end+=extra;}
 function finish(){if(active&&visible){clearTimeout(returnTimer);returnTimer=setTimeout(greet,GAP);}active=false;previous=0;stopVoice();bubble.hidden=true;shown='';host.classList.remove('surf-ze-active','surf-ze-duo');actorB.hidden=true;host.dataset.pose='waiting';host.setAttribute('aria-hidden','true');}
 /* gait follows distance: long cycles span one stride, short ones change every ~18% of the body size */
-function walkFrame(list,distance){const step=list.length>=8?path.size*.74/list.length:path.size*.18;return cycle(list,Math.floor(Math.max(0,distance)/step));}
+function walkFrame(list,distance){const step=path.size*(list.step||.74/list.length);return cycle(list,Math.floor(Math.max(0,distance)/step));}
 function tick(now){raf=0;if(!active)return;const delta=previous?Math.max(0,now-previous):0;previous=now;if(!visible){finish();return;}if(!paused())progress+=delta;
  const p=path,s=scene,t=progress;if(t>=p.end||(reduced.matches&&t>=p.talkEnd)){finish();return;}
  let xa=p.homeA,xb=p.homeB,fa,fb,pose='talking',talk=null;
