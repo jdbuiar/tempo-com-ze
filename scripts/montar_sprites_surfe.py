@@ -69,10 +69,10 @@ def feet_x(img):
     return (xs.min() + xs.max()) / 2 if len(xs) else a.shape[1] / 2
 
 
-def torso_x(img):
+def torso_x(img, part=0.35):
     """Centro da cabeça e do tronco (35% de cima): numa caminhada o corpo fica parado e as pernas mexem."""
     a = img[:, :, 3] > 40
-    top = a[:int(a.shape[0] * 0.35)]
+    top = a[:int(a.shape[0] * part)]
     xs = np.where(top.any(0))[0]
     return (xs.min() + xs.max()) / 2
 
@@ -124,17 +124,18 @@ def duo(name, cell=256):
     return frames, standing(partner) * scale / cell
 
 
-def solo(name, cols, ratio, cell=300):
+def solo(name, cols, ratio, cell=300, walking=()):
     found = [p for p in pieces(SRC / name) if p['h'] > 120]   # o balão desenhado fica de fora
     assert len(found) == 24, (name, len(found))
     rows = sorted(found, key=lambda p: p['y0'])
     order = []
     for r in range(3 if cols == 8 else 4):
         order += sorted(rows[r * cols:(r + 1) * cols], key=lambda p: p['x0'])
-    walking = [p['h'] for p in order[:8]]
-    scale = ratio * cell / float(np.median(walking))
+    heights = [p['h'] for p in order[:8]]
+    scale = ratio * cell / float(np.median(heights))
     scale = min(scale, (FEET - 0.01) * cell / max(p['h'] for p in order))
-    return [place(p['img'], scale, cell) for p in order]
+    head = lambda img: torso_x(img, 0.16)   # só a cabeça: a prancha debaixo do braço desloca o tronco
+    return [place(p['img'], scale, cell, head if k in walking else None) for k, p in enumerate(order)]
 
 
 def sea():
@@ -213,9 +214,34 @@ ratios = {}
 for who in ['ze', 'niko', 'brisa']:
     frames, ratios[who] = duo(f'duo-{who}-jorge.png')
     save(frames, 12, 256, f'surf-duo-{who}.webp')
-save(solo('niko-solo.png', 8, ratios['niko']), 8, 300, 'surf-niko.webp')
+niko_frames = solo('niko-solo.png', 8, ratios['niko'], walking=set(range(10)) | set(range(20, 24)))
+save(niko_frames, 8, 300, 'surf-niko.webp')
 save(solo('brisa-solo.png', 6, ratios['brisa']), 8, 300, 'surf-brisa.webp')
 sea()
+def reanchor(src, cols, rows, out):
+    im = Image.open(src).convert('RGBA')
+    cw, ch = im.width // cols, im.height // rows
+    atlas = Image.new('RGBA', im.size)
+    frames = []
+    for k in range(cols * rows):
+        cell = np.array(im.crop(((k % cols) * cw, (k // cols) * ch, (k % cols + 1) * cw, (k // cols + 1) * ch)))
+        a = cell[:, :, 3] > 40
+        ys, xs = np.where(a)
+        body = cell[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+        shift = round(cw / 2 - (xs.min() + torso_x(body)))
+        moved = Image.new('RGBA', (cw, ch))
+        moved.paste(Image.fromarray(cell), (shift, 0), Image.fromarray(cell))
+        atlas.alpha_composite(moved, ((k % cols) * cw, (k // cols) * ch))
+        frames.append(moved)
+    atlas.save(OUT / out, 'WEBP', quality=86, method=6)
+    return frames, cw
+
+
+if (SRC / 'ze-surf-walk-10-original.webp').exists():
+    zs, zc = reanchor(SRC / 'ze-surf-walk-10-original.webp', 5, 2, 'ze-surf-walk-10.webp')
+    STEPS['ze-surf'] = foot_steps(zs, 1, zc)
+STEPS['niko'] = foot_steps(niko_frames[:10], 1, 300)
+
 ratios['jorge'] = JORGE
 # (nome do arquivo walk-NOME.png, proporção do personagem, sentido em que anda no site, espelhar?)
 CICLOS = [('ze', 'ze', 1, False), ('brisa', 'brisa', 1, False), ('jorge', 'jorge', -1, False),
