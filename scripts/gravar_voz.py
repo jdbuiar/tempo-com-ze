@@ -79,7 +79,27 @@ async def praia():
     return novas
 
 
+async def comercial():
+    """Falas do comercial (scripts/comercial.json) gravadas em comercial/ID.mp3, com a mesma voz de cada personagem no site."""
+    lista = json.loads((RAIZ / 'scripts' / 'comercial.json').read_text(encoding='utf-8'))
+    pasta = RAIZ / 'comercial'
+    pasta.mkdir(exist_ok=True)
+    for f in lista:
+        destino = pasta / f"{f['id']}.mp3"
+        texto_salvo = pasta / f"{f['id']}.txt"
+        if destino.exists() and texto_salvo.exists() and texto_salvo.read_text(encoding='utf-8') == f['texto']:
+            continue
+        voz, ajuste = (m['voices']['pt'], {}) if f['voz'] == 'ze' else await escolher(f['voz'], 'pt')
+        try:
+            await gravar(f['texto'], voz, ajuste, destino)
+            texto_salvo.write_text(f['texto'], encoding='utf-8')
+            print('comercial gravado', f['id'])
+        except Exception as erro:
+            print('comercial falhou', f['id'], erro)
+
+
 async def main():
+    await comercial()
     novas = await praia()
     for lang, lista in falas.items():
         clips = m['clips'].setdefault(lang, {})
