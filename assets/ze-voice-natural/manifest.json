@@ -197,34 +197,6 @@
  },
  "surf": {
   "pt": {
-   "niko": {
-    "Aloha! Eu sou o Niko. O mar tá chamando, hein?": "assets/ze-voice-natural/surf/niko-pt-41e34c20.mp3",
-    "Confere o vento antes de remar. Hang loose!": "assets/ze-voice-natural/surf/niko-pt-e64bc32b.mp3",
-    "E aí, galera! Niko na área.": "assets/ze-voice-natural/surf/niko-pt-5e7b60cc.mp3",
-    "Maré enchendo e prancha encerada. Bora!": "assets/ze-voice-natural/surf/niko-pt-6f916a3d.mp3",
-    "Fala, surfista! Hoje é dia de remar bastante.": "assets/ze-voice-natural/surf/niko-pt-22c60a6f.mp3",
-    "Respeita a vez no pico e boa sessão!": "assets/ze-voice-natural/surf/niko-pt-46b658f3.mp3",
-    "Opa! Já olhou o período das ondas?": "assets/ze-voice-natural/surf/niko-pt-bbdaca1e.mp3",
-    "Período longo é onda com mais força. Fica esperto!": "assets/ze-voice-natural/surf/niko-pt-89006ae5.mp3",
-    "Salve! Primeiro eu observo o mar uns minutos.": "assets/ze-voice-natural/surf/niko-pt-2c404e00.mp3",
-    "Depois escolho o canal pra entrar. Hang loose!": "assets/ze-voice-natural/surf/niko-pt-a0d5e219.mp3",
-    "Tudo! Tô indo ver como tá o mar.": "assets/ze-voice-natural/surf/niko-pt-f070f8de.mp3",
-    "Então até mais, Jorge!": "assets/ze-voice-natural/surf/niko-pt-3195a799.mp3",
-    "E aí, Jorge! Vai cair hoje?": "assets/ze-voice-natural/surf/niko-pt-39634fa7.mp3",
-    "Tempo bom pra isso!": "assets/ze-voice-natural/surf/niko-pt-637d436f.mp3",
-    "Chuva fraca não atrapalha a onda.": "assets/ze-voice-natural/surf/niko-pt-15917b95.mp3",
-    "Pode deixar, Jorge!": "assets/ze-voice-natural/surf/niko-pt-14d69bed.mp3",
-    "Jorge, de capa amarela!": "assets/ze-voice-natural/surf/niko-pt-e47d3418.mp3",
-    "Faz bem. Molhado eu já vou ficar!": "assets/ze-voice-natural/surf/niko-pt-d78c2bf9.mp3",
-    "Por isso eu vou de roupa de borracha.": "assets/ze-voice-natural/surf/niko-pt-234fc8e0.mp3",
-    "Gelada, mas a onda tá boa!": "assets/ze-voice-natural/surf/niko-pt-947b46c5.mp3",
-    "Jorge, de cachecol e tudo!": "assets/ze-voice-natural/surf/niko-pt-5584df19.mp3",
-    "Eu vou rapidinho e depois tomo um chocolate quente!": "assets/ze-voice-natural/surf/niko-pt-bd9f009a.mp3",
-    "Dia perfeito pra cair na água!": "assets/ze-voice-natural/surf/niko-pt-864220ef.mp3",
-    "Passei! E vou beber bastante água também.": "assets/ze-voice-natural/surf/niko-pt-971b9c6b.mp3",
-    "Jorge! Também vai pro mar?": "assets/ze-voice-natural/surf/niko-pt-41e77398.mp3",
-    "Entra perto do guarda-vidas, tá?": "assets/ze-voice-natural/surf/niko-pt-901ac383.mp3"
-   },
    "brisa": {
     "Oi, gente! Eu sou a Brisa.": "assets/ze-voice-natural/surf/brisa-pt-478c898d.mp3",
     "Bora pegar uma onda?": "assets/ze-voice-natural/surf/brisa-pt-a25714c1.mp3",
@@ -295,34 +267,6 @@
    }
   },
   "es": {
-   "niko": {
-    "¡Aloha! Soy Niko. El mar está llamando, ¿eh?": "assets/ze-voice-natural/surf/niko-es-e3ea8403.mp3",
-    "Mira el viento antes de remar. ¡Hang loose!": "assets/ze-voice-natural/surf/niko-es-40cff547.mp3",
-    "¡Qué tal, gente! Llegó Niko.": "assets/ze-voice-natural/surf/niko-es-55752ea9.mp3",
-    "Marea subiendo y tabla encerada. ¡Vamos!": "assets/ze-voice-natural/surf/niko-es-4ca96464.mp3",
-    "¡Hola, surfista! Hoy toca remar mucho.": "assets/ze-voice-natural/surf/niko-es-a2706fcb.mp3",
-    "¡Respeta los turnos en el pico y buena sesión!": "assets/ze-voice-natural/surf/niko-es-af298bb2.mp3",
-    "¡Ey! ¿Ya miraste el período de las olas?": "assets/ze-voice-natural/surf/niko-es-78f9bc5e.mp3",
-    "Período largo, ola con más fuerza. ¡Atento!": "assets/ze-voice-natural/surf/niko-es-79cf4b4f.mp3",
-    "¡Buenas! Primero miro el mar unos minutos.": "assets/ze-voice-natural/surf/niko-es-b7966fbe.mp3",
-    "Después elijo el canal para entrar. ¡Hang loose!": "assets/ze-voice-natural/surf/niko-es-88152ac8.mp3",
-    "¡Todo! Voy a ver cómo está el mar.": "assets/ze-voice-natural/surf/niko-es-b0310be1.mp3",
-    "¡Hasta luego, Jorge!": "assets/ze-voice-natural/surf/niko-es-1add2477.mp3",
-    "¡Ey, Jorge! ¿Hoy entras al agua?": "assets/ze-voice-natural/surf/niko-es-68a787d6.mp3",
-    "¡Buen tiempo para eso!": "assets/ze-voice-natural/surf/niko-es-b03a2059.mp3",
-    "La lluvia débil no arruina la ola.": "assets/ze-voice-natural/surf/niko-es-44169155.mp3",
-    "¡Claro, Jorge!": "assets/ze-voice-natural/surf/niko-es-29355a98.mp3",
-    "¡Jorge, con impermeable amarillo!": "assets/ze-voice-natural/surf/niko-es-969f7350.mp3",
-    "Haces bien. ¡Yo me voy a mojar igual!": "assets/ze-voice-natural/surf/niko-es-26615ba3.mp3",
-    "Por eso voy con traje de neopreno.": "assets/ze-voice-natural/surf/niko-es-c7681e09.mp3",
-    "¡Helada, pero la ola está buena!": "assets/ze-voice-natural/surf/niko-es-025a33d5.mp3",
-    "¡Jorge, con bufanda y todo!": "assets/ze-voice-natural/surf/niko-es-79e6c414.mp3",
-    "¡Yo voy un ratito y después un chocolate caliente!": "assets/ze-voice-natural/surf/niko-es-23f4ccf8.mp3",
-    "¡Día perfecto para meterse al agua!": "assets/ze-voice-natural/surf/niko-es-e89f4e73.mp3",
-    "¡Sí! Y voy a tomar mucha agua también.": "assets/ze-voice-natural/surf/niko-es-c93f2ed5.mp3",
-    "¡Jorge! ¿También vas al mar?": "assets/ze-voice-natural/surf/niko-es-471321e8.mp3",
-    "Entra cerca del socorrista, ¿vale?": "assets/ze-voice-natural/surf/niko-es-bbbbe145.mp3"
-   },
    "brisa": {
     "¡Hola, gente! Soy Brisa.": "assets/ze-voice-natural/surf/brisa-es-361adc47.mp3",
     "¿Vamos a agarrar una ola?": "assets/ze-voice-natural/surf/brisa-es-479a77ec.mp3",
@@ -393,34 +337,6 @@
    }
   },
   "en": {
-   "niko": {
-    "Aloha! I'm Niko. The ocean is calling, huh?": "assets/ze-voice-natural/surf/niko-en-7011d7df.mp3",
-    "Check the wind before you paddle out. Hang loose!": "assets/ze-voice-natural/surf/niko-en-97d4c959.mp3",
-    "Hey, crew! Niko is here.": "assets/ze-voice-natural/surf/niko-en-7efac05d.mp3",
-    "Rising tide and a waxed board. Let's go!": "assets/ze-voice-natural/surf/niko-en-3d100f6b.mp3",
-    "Hey, surfer! Lots of paddling today.": "assets/ze-voice-natural/surf/niko-en-69298f1c.mp3",
-    "Respect the lineup and have a great session!": "assets/ze-voice-natural/surf/niko-en-8d2790f8.mp3",
-    "Hey! Did you check the wave period?": "assets/ze-voice-natural/surf/niko-en-399358f1.mp3",
-    "Longer period means stronger waves. Stay sharp!": "assets/ze-voice-natural/surf/niko-en-33434d1d.mp3",
-    "Hi! First I watch the sea for a few minutes.": "assets/ze-voice-natural/surf/niko-en-a11f4c36.mp3",
-    "Then I pick the channel to paddle out. Hang loose!": "assets/ze-voice-natural/surf/niko-en-17b86cd8.mp3",
-    "All good! Going to check the surf.": "assets/ze-voice-natural/surf/niko-en-7be043d8.mp3",
-    "See you later, Jorge!": "assets/ze-voice-natural/surf/niko-en-7451b1e5.mp3",
-    "Hey, Jorge! Paddling out today?": "assets/ze-voice-natural/surf/niko-en-fc077d6c.mp3",
-    "Great weather for it!": "assets/ze-voice-natural/surf/niko-en-94940e3e.mp3",
-    "Light rain doesn't ruin the waves.": "assets/ze-voice-natural/surf/niko-en-05f1f8ff.mp3",
-    "Will do, Jorge!": "assets/ze-voice-natural/surf/niko-en-02b87666.mp3",
-    "Jorge, rocking the yellow raincoat!": "assets/ze-voice-natural/surf/niko-en-e04c47a7.mp3",
-    "Smart. I'm getting wet anyway!": "assets/ze-voice-natural/surf/niko-en-f4f3994f.mp3",
-    "That's why I'm wearing a wetsuit.": "assets/ze-voice-natural/surf/niko-en-6f679ce2.mp3",
-    "Freezing, but the waves are good!": "assets/ze-voice-natural/surf/niko-en-68211987.mp3",
-    "Jorge, scarf and all!": "assets/ze-voice-natural/surf/niko-en-9b122940.mp3",
-    "Just a quick session, then hot chocolate!": "assets/ze-voice-natural/surf/niko-en-344e87d5.mp3",
-    "Perfect day to hit the water!": "assets/ze-voice-natural/surf/niko-en-adcd105c.mp3",
-    "Yes! And I'm drinking lots of water too.": "assets/ze-voice-natural/surf/niko-en-75e2f599.mp3",
-    "Jorge! Heading to the sea too?": "assets/ze-voice-natural/surf/niko-en-9216d450.mp3",
-    "Swim near the lifeguard, okay?": "assets/ze-voice-natural/surf/niko-en-871116b5.mp3"
-   },
    "brisa": {
     "Hi, everyone! I'm Brisa.": "assets/ze-voice-natural/surf/brisa-en-3fc02c4f.mp3",
     "Shall we catch a wave?": "assets/ze-voice-natural/surf/brisa-en-d85a3ca6.mp3",
@@ -492,20 +408,6 @@
   }
  },
  "surfVoices": {
-  "niko": {
-   "pt": {
-    "voice": "en-US-AndrewMultilingualNeural",
-    "opts": {}
-   },
-   "es": {
-    "voice": "es-AR-TomasNeural",
-    "opts": {}
-   },
-   "en": {
-    "voice": "en-US-AndrewNeural",
-    "opts": {}
-   }
-  },
   "brisa": {
    "pt": {
     "voice": "pt-BR-FranciscaNeural",

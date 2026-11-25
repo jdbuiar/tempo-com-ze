@@ -17,9 +17,10 @@ CANDIDATAS = {
     'ze':    {'pt': [('pt-BR-AntonioNeural', {})], 'es': [('es-ES-AlvaroNeural', {})], 'en': [('en-US-GuyNeural', {})]},
     'brisa': {'pt': [('pt-BR-FranciscaNeural', {}), ('pt-BR-ThalitaMultilingualNeural', {})],
               'es': [('es-ES-ElviraNeural', {})], 'en': [('en-US-AriaNeural', {}), ('en-US-JennyNeural', {})]},
-    'niko':  {'pt': [('en-US-AndrewMultilingualNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '+10Hz', 'rate': '+6%'})],
-              'es': [('es-AR-TomasNeural', {}), ('es-ES-AlvaroNeural', {'pitch': '+10Hz', 'rate': '+6%'})],
-              'en': [('en-AU-WilliamNeural', {}), ('en-US-AndrewNeural', {})]},
+    # Niko é surfista jovem e animado: voz mais leve, um pouco mais rápida e mais aguda
+    'niko':  {'pt': [('en-AU-WilliamMultilingualNeural', {'rate': '+10%', 'pitch': '+6Hz'}), ('en-US-AndrewMultilingualNeural', {'rate': '+14%', 'pitch': '+10Hz'})],
+              'es': [('es-AR-TomasNeural', {'rate': '+12%', 'pitch': '+8Hz'}), ('es-ES-AlvaroNeural', {'pitch': '+12Hz', 'rate': '+10%'})],
+              'en': [('en-AU-WilliamMultilingualNeural', {'rate': '+10%', 'pitch': '+6Hz'}), ('en-US-AndrewNeural', {'rate': '+12%', 'pitch': '+8Hz'})]},
     'jorge': {'pt': [('en-US-BrianMultilingualNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
               'es': [('es-MX-JorgeNeural', {}), ('es-ES-AlvaroNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
               'en': [('en-US-ChristopherNeural', {}), ('en-US-EricNeural', {})]},
@@ -65,7 +66,7 @@ async def praia():
         if f['text'] in clips:
             continue
         voz, ajuste = await escolher(f['voice'], f['lang'])
-        nome = f"{f['voice']}-{f['lang']}-{hashlib.sha1(f['text'].encode()).hexdigest()[:8]}.mp3"
+        nome = f"{f['voice']}-{f['lang']}-{hashlib.sha1((f['text'] + voz + json.dumps(ajuste, sort_keys=True)).encode()).hexdigest()[:8]}.mp3"
         try:
             await gravar(f['text'], voz, ajuste, SURF / nome)
         except Exception as erro:   # uma fala que falhar fica sem voz até a próxima rodada; o resto é salvo
