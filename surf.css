@@ -36,7 +36,7 @@ html.ze-voice-on .ze-sound-hint{display:none}
 
 .no-voice .ze-sound-hint{display:none}
 /* Mar entre os pés do Zé e o quadro do surfe: 24 faixas (12 de ida, 12 de volta) passando em loop */
-.surf-mar{--mar-h:26px;display:block;width:100%;height:var(--mar-h);margin:-7px 0 16px;background:url('assets/surf-mar.webp') 0 0/calc(var(--mar-h)*46.2857) calc(var(--mar-h)*24) repeat-x;animation:surf-mar 2.6s steps(24) infinite;pointer-events:none;opacity:.95}
+.surf-mar{--mar-h:40px;display:block;width:100%;height:var(--mar-h);margin:-7px 0 0;background:url('assets/surf-mar.webp?v=2') 0 0/calc(var(--mar-h)*23.1429) calc(var(--mar-h)*24) repeat-x;animation:surf-mar 2.6s steps(24) infinite;pointer-events:none;opacity:.95}
 @keyframes surf-mar{from{background-position-y:0}to{background-position-y:calc(var(--mar-h)*-24)}}
 .surf-ze-welcome.surf-ze-active{margin-bottom:0}
 .surf-ze-actor-b{z-index:1}.surf-ze-actor:first-child{z-index:2}
@@ -44,5 +44,5 @@ html.ze-voice-on .ze-sound-hint{display:none}
 .surf-ze-duo .surf-ze-bubble{top:6px;left:50%;transform:translateX(-50%);width:min(420px,92%);max-width:none;border-radius:19px 19px 19px 4px}
 .surf-ze-duo .surf-ze-bubble[data-speaker="J"]{border-radius:19px 19px 4px 19px}
 .surf-ze-duo .ze-sound-hint{display:none}
-@media(max-width:750px){.surf-mar{--mar-h:22px;margin-bottom:12px}.surf-ze-welcome.surf-ze-duo.surf-ze-active{height:285px}.surf-ze-duo .surf-ze-bubble{top:4px}}
+@media(max-width:750px){.surf-mar{--mar-h:34px}.surf-ze-welcome.surf-ze-duo.surf-ze-active{height:285px}.surf-ze-duo .surf-ze-bubble{top:4px}}
 @media(prefers-reduced-motion:reduce){.surf-mar{animation:none}}
