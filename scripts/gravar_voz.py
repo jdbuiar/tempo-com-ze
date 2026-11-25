@@ -17,20 +17,27 @@ CANDIDATAS = {
     'ze':    {'pt': [('pt-BR-AntonioNeural', {})], 'es': [('es-ES-AlvaroNeural', {})], 'en': [('en-US-GuyNeural', {})]},
     'brisa': {'pt': [('pt-BR-FranciscaNeural', {}), ('pt-BR-ThalitaMultilingualNeural', {})],
               'es': [('es-ES-ElviraNeural', {})], 'en': [('en-US-AriaNeural', {}), ('en-US-JennyNeural', {})]},
-    'niko':  {'pt': [('pt-BR-JulioNeural', {}), ('pt-BR-NicolauNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '+10Hz', 'rate': '+6%'})],
+    'niko':  {'pt': [('en-US-AndrewMultilingualNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '+10Hz', 'rate': '+6%'})],
               'es': [('es-AR-TomasNeural', {}), ('es-ES-AlvaroNeural', {'pitch': '+10Hz', 'rate': '+6%'})],
               'en': [('en-AU-WilliamNeural', {}), ('en-US-AndrewNeural', {})]},
-    'jorge': {'pt': [('pt-BR-DonatoNeural', {}), ('pt-BR-FabioNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
+    'jorge': {'pt': [('en-US-BrianMultilingualNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
               'es': [('es-MX-JorgeNeural', {}), ('es-ES-AlvaroNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
               'en': [('en-US-ChristopherNeural', {}), ('en-US-EricNeural', {})]},
 }
 SURF = PASTA / 'surf'
 
 
-async def gravar(texto, voz, ajuste, destino):
-    await edge_tts.Communicate(texto, voz, **ajuste).save(str(destino))
-    if destino.stat().st_size < 1000:
-        raise RuntimeError('áudio vazio')
+async def gravar(texto, voz, ajuste, destino, tentativas=3):
+    for vez in range(tentativas):
+        try:
+            await edge_tts.Communicate(texto, voz, **ajuste).save(str(destino))
+            if destino.stat().st_size < 1000:
+                raise RuntimeError('áudio vazio')
+            return
+        except Exception:
+            if vez == tentativas - 1:
+                raise
+            await asyncio.sleep(3 * (vez + 1))
 
 
 async def escolher(quem, lang):
@@ -39,7 +46,7 @@ async def escolher(quem, lang):
         return salvo['voice'], salvo.get('opts', {})
     for voz, ajuste in CANDIDATAS[quem][lang]:
         try:
-            await gravar('Olá' if lang == 'pt' else 'Hola' if lang == 'es' else 'Hello', voz, ajuste, SURF / 'teste.mp3')
+            await gravar({'pt': 'Olá, tudo bem?', 'es': 'Hola, ¿qué tal?', 'en': 'Hello, how are you?'}[lang], voz, ajuste, SURF / 'teste.mp3', 1)
             m['surfVoices'][quem][lang] = {'voice': voz, 'opts': ajuste}
             print('voz escolhida', quem, lang, voz, ajuste)
             return voz, ajuste
@@ -59,7 +66,11 @@ async def praia():
             continue
         voz, ajuste = await escolher(f['voice'], f['lang'])
         nome = f"{f['voice']}-{f['lang']}-{hashlib.sha1(f['text'].encode()).hexdigest()[:8]}.mp3"
-        await gravar(f['text'], voz, ajuste, SURF / nome)
+        try:
+            await gravar(f['text'], voz, ajuste, SURF / nome)
+        except Exception as erro:   # uma fala que falhar fica sem voz até a próxima rodada; o resto é salvo
+            print('falhou', f['voice'], f['lang'], f['text'], erro)
+            continue
         clips[f['text']] = f"assets/ze-voice-natural/surf/{nome}"
         novas += 1
         print('gravada', f['voice'], f['lang'], f['text'])
