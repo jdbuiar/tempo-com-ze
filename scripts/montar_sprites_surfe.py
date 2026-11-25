@@ -168,16 +168,45 @@ def step_per_frame(order, frames_per_cycle):
     return 2 * step / frames_per_cycle
 
 
-def walk(name, ratio, cell=256):
+def foot_steps(atlas_frames, face, cell):
+    """Quanto o pé no chão recua de um quadro para o outro (fração do quadro). Segue cada pé que toca o chão,
+    corta os picos falsos das trocas de pé e suaviza; o site move o corpo exatamente isso, sem o pé deslizar."""
+    feet = []
+    for f in atlas_frames:
+        a = np.array(f)[:, :, 3] > 40
+        b = np.where(a.any(1))[0][-1]
+        lab, _ = ndimage.label(a[b - 5:b + 1].any(0))
+        feet.append([(o[0].start + o[0].stop) / 2 for o in ndimage.find_objects(lab)])
+    n, raw = len(feet), []
+    for k in range(n):
+        nxt = feet[(k + 1) % n]
+        cand = [(x - min(nxt, key=lambda v: abs(v - x))) * face for x in feet[k]]
+        cand = [v for v in cand if -1 <= v <= 22]
+        raw.append(max(cand) if cand else None)
+    med = float(np.median([r for r in raw if r is not None]))
+    clip = [med if r is None else min(max(r, 0), 1.5 * med) for r in raw]
+    smooth = [max((clip[k - 1] + 2 * clip[k] + clip[(k + 1) % n]) / 4, 1.0) for k in range(n)]
+    return [round(s / cell, 4) for s in smooth]
+
+
+STEPS = {}
+
+
+def walk(name, ratio, face, mirror=False, cell=256):
+    """Ciclo de 24 quadros (6 x 4). face: 1 anda para a direita, -1 para a esquerda (depois do espelho)."""
     found = pieces(SRC / f'walk-{name}.png')
     assert len(found) == 24, (name, len(found))
     rows = sorted(found, key=lambda p: p['y0'])
     order = []
     for r in range(4):
         order += sorted(rows[r * 6:(r + 1) * 6], key=lambda p: p['x0'])
+    if mirror:
+        for p in order:
+            p['img'] = p['img'][:, ::-1].copy()
     scale = ratio * cell / float(np.median([p['h'] for p in order]))
-    save([place(p['img'], scale, cell, torso_x) for p in order], 6, cell, f'surf-walk-{name}.webp')
-    print(f'  passo {name}: {step_per_frame(order, 24) * ratio:.4f} do quadro por quadro')
+    frames = [place(p['img'], scale, cell, torso_x) for p in order]
+    save(frames, 6, cell, f'surf-walk-{name}.webp')
+    STEPS[name] = foot_steps(frames, face, cell)
 
 
 ratios = {}
@@ -188,9 +217,11 @@ save(solo('niko-solo.png', 8, ratios['niko']), 8, 300, 'surf-niko.webp')
 save(solo('brisa-solo.png', 6, ratios['brisa']), 8, 300, 'surf-brisa.webp')
 sea()
 ratios['jorge'] = JORGE
-for who in ['ze', 'jorge', 'brisa']:
-    if (SRC / f'walk-{who}.png').exists():
-        walk(who, ratios[who])
-niko = pieces(SRC / 'niko-solo.png')
-niko = sorted([p for p in niko if p['h'] > 120], key=lambda p: (p['y0'] // 200, p['x0']))
-print(f"  passo niko (quadros 1-10, ciclo de 10): {step_per_frame(niko[:10], 10) * ratios['niko']:.4f} do quadro por quadro")
+# (nome do arquivo walk-NOME.png, proporção do personagem, sentido em que anda no site, espelhar?)
+CICLOS = [('ze', 'ze', 1, False), ('brisa', 'brisa', 1, False), ('jorge', 'jorge', -1, False),
+          ('jorge-chuva', 'jorge', -1, False), ('jorge-frio', 'jorge', -1, False)]
+for name, who, face, mirror in CICLOS:
+    if (SRC / f'walk-{name}.png').exists():
+        walk(name, ratios[who], face, mirror)
+import json
+print('STEPS para surf-ze.js:', json.dumps(STEPS, separators=(',', ':')))

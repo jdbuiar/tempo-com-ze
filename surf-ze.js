@@ -16,7 +16,9 @@ const ATLAS={
  duoBrisa:{src:'assets/surf-duo-brisa.webp',cols:12,rows:4},
  walkZe:{src:'assets/surf-walk-ze.webp',cols:6,rows:4},
  walkJorge:{src:'assets/surf-walk-jorge.webp',cols:6,rows:4},
- walkBrisa:{src:'assets/surf-walk-brisa.webp',cols:6,rows:4}
+ walkBrisa:{src:'assets/surf-walk-brisa.webp',cols:6,rows:4},
+ walkJorgeRain:{src:'assets/surf-walk-jorge-chuva.webp',cols:6,rows:4},
+ walkJorgeCold:{src:'assets/surf-walk-jorge-frio.webp',cols:6,rows:4}
 };
 /* Each actor: walk cycle, arrival poses, talk loop and exit walk, as [atlas,index] frames. */
 const seq=(atlas,list)=>list.map(i=>[atlas,i]);
@@ -26,8 +28,11 @@ const walk=(atlas,list,step)=>Object.assign(seq(atlas,list),{step});
 const range=n=>Array.from({length:n},(_,i)=>i);
 /* per-frame advance (fraction of the sprite box), measured by following the foot on the ground from one
    frame to the next; the drawings are not perfectly even, so one number per frame keeps the feet planted */
-const STEPS={"brisa":[0.0171,0.0234,0.0312,0.0327,0.0303,0.0234,0.0186,0.021,0.0176,0.0107,0.0186,0.0269,0.0264,0.0308,0.0352,0.0322,0.0264,0.0254,0.0273,0.0254,0.0234,0.02,0.0161,0.0161],"ze":[0.021,0.022,0.0264,0.0283,0.0273,0.0229,0.0146,0.0161,0.022,0.0225,0.02,0.0132,0.0146,0.0249,0.0234,0.0151,0.0142,0.0122,0.0127,0.0205,0.022,0.0166,0.0142,0.0181],"jorge":[0.0206,0.0261,0.0226,0.0234,0.0205,0.0132,0.0197,0.0295,0.028,0.0234,0.0205,0.0166,0.0201,0.0242,0.0227,0.0217,0.0148,0.0153,0.0277,0.0321,0.028,0.0195,0.0093,0.0093]};
-const WALK={ze:walk('walkZe',range(24),STEPS.ze),jorge:walk('walkJorge',range(24),STEPS.jorge),brisa:walk('walkBrisa',range(24),STEPS.brisa),niko:walk('niko',range(10),.035)};
+const STEPS={"ze":[0.021,0.022,0.0264,0.0283,0.0273,0.0229,0.0146,0.0161,0.022,0.0225,0.02,0.0132,0.0146,0.0249,0.0234,0.0151,0.0142,0.0122,0.0127,0.0205,0.022,0.0166,0.0142,0.0181],"brisa":[0.0171,0.0234,0.0312,0.0327,0.0303,0.0234,0.0186,0.021,0.0176,0.0107,0.0186,0.0269,0.0264,0.0308,0.0352,0.0322,0.0264,0.0254,0.0273,0.0254,0.0234,0.02,0.0161,0.0161],"jorge":[0.0206,0.0261,0.0226,0.0234,0.0205,0.0132,0.0197,0.0295,0.028,0.0234,0.0205,0.0166,0.0201,0.0242,0.0227,0.0217,0.0148,0.0153,0.0277,0.0321,0.028,0.0195,0.0093,0.0093],"jorge-chuva":[0.0171,0.0244,0.0205,0.019,0.022,0.0181,0.0171,0.0225,0.0229,0.0239,0.0244,0.0181,0.0171,0.0186,0.0156,0.0176,0.0161,0.0151,0.0239,0.0273,0.0254,0.021,0.0093,0.0059],"jorge-frio":[0.0222,0.0327,0.0305,0.0278,0.022,0.0122,0.0183,0.0249,0.022,0.0264,0.03,0.0278,0.0271,0.0308,0.03,0.0244,0.0229,0.0276,0.0349,0.0349,0.0251,0.0176,0.0137,0.0117]};
+const WALK={ze:walk('walkZe',range(24),STEPS.ze),jorge:walk('walkJorge',range(24),STEPS.jorge),brisa:walk('walkBrisa',range(24),STEPS.brisa),niko:walk('niko',range(10),.035),
+ jorgeRain:walk('walkJorgeRain',range(24),STEPS['jorge-chuva']),jorgeCold:walk('walkJorgeCold',range(24),STEPS['jorge-frio'])};
+/* which outfit rows have a walk cycle that matches the chat pose (0 mild, 1 rain, 2 cold, 3 hot) */
+const JORGE_WALK=[WALK.jorge,WALK.jorgeRain,WALK.jorgeCold,null],ZE_WALK=[WALK.ze,null,null,null];
 const ACTOR={
  ze:{name:'ZÉ',walk:seq('zeWalk',[0,1,2,3,4,5,6,7,8,9]),arrive:seq('zeGreet',[0,1]),talk:seq('zeGreet',[2]),exitWalk:seq('zeWalk',[0,1,2,3,4,5,6,7,8,9])},
  niko:{name:'NIKO',walk:WALK.niko,arrive:seq('niko',[10,11,12,12]),talk:seq('niko',[13,14,16,17,18,15]),bye:seq('niko',[19]),exitWalk:WALK.niko},
@@ -36,7 +41,7 @@ const ACTOR={
 /* Walking needs a full cycle: Brisa and Niko always have one, Zé and Jorge only in the mild-weather outfit
    (duo scenes run only then, see nextScene). */
 const duoActor=(atlas,name,row,jorge,who)=>{const o=(jorge?6:0)+row*12,key=jorge?'jorge':who;
- const smooth=key==='brisa'||key==='niko'||row===0?WALK[key]:null;
+ const smooth=key==='brisa'||key==='niko'?WALK[key]:key==='jorge'?JORGE_WALK[row]:ZE_WALK[row];
  return {name,fade:!smooth,walk:smooth,arrive:seq(atlas,[jorge?o+4:o+2]),listen:seq(atlas,[o+4]),talk:seq(atlas,jorge?[o+2,o+3]:[o+3,o+2]),exitWalk:smooth};};
 
 /* Jorge's outfit (and Zé's street clothes) follow the sky shown on the main forecast. */
@@ -55,9 +60,10 @@ function pickIndex(key,count){const s=store(key,{});let last=Number.isInteger(s.
  last=left.shift();save(key,{last,left});return last;}
 /* a new visitor at most once a minute while the surf section stays on screen */
 const GAP=60000;
-/* Jorge's chats only happen when everyone can walk in for real: his (and Zé's street) walk cycle exists
-   for the mild-weather outfit only, so in rain, cold and heat the beach keeps the solo visitors. */
-function nextScene(){const duoOk=weatherRow()===0;for(let i=0;i<SCENES.length;i++){const s=SCENES[pickIndex('ze-surf-scenes-v1',SCENES.length)];if(duoOk||!s.startsWith('duo'))return s;}return 'ze';}
+/* Jorge's chats only happen when everyone can walk in for real, in an outfit that matches the chat pose:
+   Jorge walks in mild, rain and cold; Zé in street clothes only in mild (see JORGE_WALK / ZE_WALK). */
+function nextScene(){const row=weatherRow(),ok=s=>!s.startsWith('duo')||JORGE_WALK[row]&&(s!=='duoZe'||ZE_WALK[row]);
+ for(let i=0;i<SCENES.length;i++){const s=SCENES[pickIndex('ze-surf-scenes-v1',SCENES.length)];if(ok(s))return s;}return 'ze';}
 
 /* ---------- DOM ---------- */
 const supported=!!window.ZeVoice?.supported;
@@ -84,7 +90,7 @@ function build(id){
  const chats=(who==='ze'?ZE_CHATS:SURF_CHATS)[l][w],i=pickIndex('ze-surf-'+id+'-'+w+'-v1',chats.length);
  return {id,who,row,weather:w,line:i,a:duoActor(atlas,ACTOR[who].name,row,false,who),b:duoActor(atlas,'JORGE',row,true),lines:chats[i].map(([s,t])=>[s,t.replace('{A}',ACTOR[who].name[0]+ACTOR[who].name.slice(1).toLowerCase())]),atlases:[...new Set([atlas,...[...scene_walks(who,row)]])]};
 }
-function scene_walks(who,row){const w=[];if(who==='brisa')w.push('walkBrisa');if(who==='niko')w.push('niko');if(row===0){w.push('walkJorge');if(who==='ze')w.push('walkZe');}return w;}
+function scene_walks(who,row){const w=[];if(who==='brisa')w.push('walkBrisa');if(who==='niko')w.push('niko');w.push(['walkJorge','walkJorgeRain','walkJorgeCold'][row]);if(who==='ze'&&row===0)w.push('walkZe');return w.filter(Boolean);}
 /* Re-read the lines in the new language without changing the chosen chat. */
 function relabel(){if(!scene)return;const l=lang();
  if(scene.id==='ze')scene.lines=[['A',ZE_LINES[l][scene.line]]];
