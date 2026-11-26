@@ -20,7 +20,7 @@ Site estático (HTML, CSS e JavaScript puro), publicado pelo GitHub Pages a part
 | Condição de "agora" medida de verdade | Worker `ze-obs` na Cloudflare (METAR da estação de aeroporto mais próxima) |
 | Chuva caindo agora | Radar da RainViewer |
 | Avisos meteorológicos oficiais | Worker `ze-avisos` na Cloudflare, que consulta o INMET. Se o Worker falhar, o site consulta o INMET direto |
-| Som de chuva | Gerado por `scripts/gerar_som_chuva.py` (`assets/sons/chuva-fraca.mp3`), toca em loop enquanto chove, com botão de som no card principal |
+| Som de chuva | 4 sons gerados por `scripts/gerar_som_chuva.py` em `assets/sons/` (garoa, chuva fraca, chuva forte, tempestade com trovão), trocam conforme a chuva, com botão de som no card principal |
 | Mapa | Windy (carrega só quando o visitante abre) |
 | Comentários dos visitantes | Tabela `ze_comentarios` no Supabase (só aceita envio, ninguém lê pelo site) |
 
