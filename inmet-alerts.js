@@ -76,8 +76,21 @@
     if(full)return `<article class="inmet-alert" style="--alert:${color}"><div class="inmet-badge" aria-hidden="true">!</div><div class="inmet-body">${tag}${more}</div></article>`;
     return `<details class="inmet-alert inmet-mini" style="--alert:${color}"><summary><div class="inmet-badge" aria-hidden="true">!</div><div class="inmet-body">${tag}</div><b class="inmet-open" aria-hidden="true">›</b></summary><div class="inmet-body inmet-rest">${more}</div></details>`;
   }
+  /* Short line inside the main card (like the phone weather apps), so the warning is seen without scrolling up; a tap opens the full card */
+  const LEVEL={pt:['amarelo','laranja','vermelho'],es:['amarillo','naranja','rojo'],en:['Yellow','Orange','Red']};
+  const HEAD={pt:l=>`Alerta ${l}`,es:l=>`Alerta ${l}`,en:l=>`${l} alert`};
+  function heroChip(items){
+    const b=document.getElementById('hero-alert');if(!b)return;
+    const a=items.find(x=>!x.futuro);if(!a){b.hidden=true;return}
+    const l=lang(),color=/^#[0-9a-f]{6}$/i.test(a.cor)?a.cor:'#f2c94c';
+    b.style.setProperty('--alert',color);
+    b.innerHTML=`<span aria-hidden="true">⚠</span> ${esc(HEAD[l](LEVEL[l][Math.min(3,Math.max(1,a.nivel))-1]))}: ${esc(a.evento)}`;
+    b.onclick=()=>{const el=document.getElementById('inmet-alerts');el?.scrollIntoView({behavior:'smooth',block:'start'})};
+    b.hidden=false;
+  }
   function render(items){
     const el=box();if(!el)return;
+    heroChip(items);
     if(!items.length){el.hidden=true;el.replaceChildren();return}
     const t=TXT[lang()];
     const head=items.length>1?`<p class="inmet-count">${esc(t.several(items.length))}</p>`:'';
