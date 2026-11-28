@@ -46,3 +46,32 @@ html.ze-voice-on .ze-sound-hint{display:none}
 .surf-ze-duo .ze-sound-hint{display:none}
 @media(max-width:750px){.surf-mar{--mar-h:34px}.surf-ze-welcome.surf-ze-duo.surf-ze-active{height:285px}.surf-ze-duo .surf-ze-bubble{top:4px}}
 @media(prefers-reduced-motion:reduce){.surf-mar{animation:none}}
+
+/* Céu da praia: segue o tempo do pico escolhido agora (surf.js SurfSkyKind) */
+.surf-ceu{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;border-radius:18px;transition:background .6s}
+.surf-ze-actor{z-index:1}.surf-ze-actor:not(.surf-ze-actor-b){z-index:2}.surf-ze-bubble{z-index:3}
+.surf-ceu i{position:absolute;display:block;opacity:0;transition:opacity .6s}
+.ceu-astro{top:14px;left:6%;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff9e2,#f4d79c 70%,#e2c084);box-shadow:0 0 0 10px #fff3cc33,0 0 34px #f7dc9a80}
+.noite .ceu-astro{background:radial-gradient(circle at 35% 25%,#f4f6ee,#c9dadb);box-shadow:inset -9px -3px 0 #a9c5cc,0 0 26px #ffffff40}
+.ceu-nuvem{height:34px;border-radius:40px;background:linear-gradient(170deg,#ffffffd0,#e2f1f5a8);box-shadow:0 8px 14px #4e7f9014;animation:ceu-vento 28s ease-in-out infinite alternate}
+.ceu-nuvem:before,.ceu-nuvem:after{content:'';position:absolute;border-radius:50%;background:inherit}
+.ceu-nuvem:before{width:46%;height:150%;left:16%;top:-62%}.ceu-nuvem:after{width:32%;height:115%;right:14%;top:-40%}
+.ceu-nuvem.n1{top:30px;left:2%;width:130px}.ceu-nuvem.n2{top:16px;right:3%;width:150px;animation-delay:-9s}.ceu-nuvem.n3{top:62px;left:26%;width:96px;animation-delay:-17s;transform:scale(.8)}
+.ceu-gotas{inset:0;background-image:linear-gradient(105deg,transparent 46%,#5d93a8 47%,transparent 49%);background-size:22px 26px;animation:ceu-chuva .9s linear infinite}
+.ceu-gotas.g2{background-size:31px 37px;animation-duration:1.2s;background-position:9px 5px}
+.ceu-raio{top:40px;right:20%;width:16px;height:46px;background:#fff6b8;clip-path:polygon(55% 0,0 58%,42% 58%,22% 100%,100% 36%,56% 36%,80% 0);animation:ceu-raio 6s infinite}
+.surf-ceu[data-ceu=limpo] .ceu-astro{opacity:1}
+.surf-ceu[data-ceu=parcial] .ceu-astro,.surf-ceu[data-ceu=parcial] .n2{opacity:1}
+.surf-ceu[data-ceu=nublado]{background:linear-gradient(#b9cdd44d,transparent 70%)}
+.surf-ceu[data-ceu=nublado] .ceu-nuvem{opacity:1;filter:saturate(.4) brightness(.93)}
+.surf-ceu[data-ceu=garoa]{background:linear-gradient(#a7bec74d,transparent 75%)}
+.surf-ceu[data-ceu=garoa] .ceu-nuvem{opacity:1;filter:saturate(.3) brightness(.86)}.surf-ceu[data-ceu=garoa] .ceu-gotas:not(.g2){opacity:.17;background-size:18px 22px}
+.surf-ceu[data-ceu=chuva]{background:linear-gradient(#90a9b466,transparent 80%)}
+.surf-ceu[data-ceu=chuva] .ceu-nuvem{opacity:1;filter:saturate(.2) brightness(.74)}.surf-ceu[data-ceu=chuva] .ceu-gotas{opacity:.42}
+.surf-ceu[data-ceu=tempestade]{background:linear-gradient(#6f879380,transparent 85%)}
+.surf-ceu[data-ceu=tempestade] .ceu-nuvem{opacity:1;filter:saturate(.15) brightness(.6)}.surf-ceu[data-ceu=tempestade] .ceu-gotas{opacity:.5}.surf-ceu[data-ceu=tempestade] .ceu-raio{opacity:1}
+@keyframes ceu-vento{from{translate:-14px 0}to{translate:18px 0}}
+@keyframes ceu-chuva{from{background-position:0 0}to{background-position:-9px 52px}}
+@keyframes ceu-raio{0%,88%,93%,100%{opacity:0}89%,91%{opacity:1}}
+@media(max-width:750px){.ceu-astro{width:42px;height:42px}.ceu-nuvem.n1{width:96px}.ceu-nuvem.n2{width:110px}.ceu-nuvem.n3{display:none}}
+@media(prefers-reduced-motion:reduce){.ceu-nuvem,.ceu-gotas,.ceu-raio{animation:none}}

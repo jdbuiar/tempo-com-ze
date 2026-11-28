@@ -71,6 +71,10 @@ const supported=!!window.ZeVoice?.supported;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const host=document.createElement('div');host.id='surf-ze';host.className='surf-ze-welcome';host.setAttribute('aria-hidden','true');
 host.innerHTML='<div class="surf-ze-actor" role="img"><div class="surf-ze-sprite" aria-hidden="true"></div></div><div class="surf-ze-actor surf-ze-actor-b" role="img" hidden><div class="surf-ze-sprite" aria-hidden="true"></div></div><div class="surf-ze-bubble" hidden><span class="surf-ze-name"></span><p class="surf-ze-phrase" aria-live="polite"></p><span class="ze-sound-hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="w1" d="M16 9.5a3.5 3.5 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="w2" d="M18.5 7a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></div>';
+/* sky at the beach right now (clouds, drizzle, rain, sun), behind the characters */
+const sky=document.createElement('div');sky.className='surf-ceu';sky.setAttribute('aria-hidden','true');sky.innerHTML='<i class="ceu-astro"></i><i class="ceu-nuvem n1"></i><i class="ceu-nuvem n2"></i><i class="ceu-nuvem n3"></i><i class="ceu-gotas"></i><i class="ceu-gotas g2"></i><i class="ceu-raio"></i>';host.prepend(sky);
+function paintSky(){const s=window.SurfSkyKind?.();sky.dataset.ceu=s?s.kind:'';sky.classList.toggle('noite',!!s&&!s.day);}
+window.addEventListener('ze:surf-render',paintSky);
 const sea=document.createElement('div');sea.className='surf-mar';sea.setAttribute('aria-hidden','true');
 const [actorA,actorB]=host.querySelectorAll('.surf-ze-actor'),[spriteA,spriteB]=host.querySelectorAll('.surf-ze-sprite');
 const bubble=host.querySelector('.surf-ze-bubble'),nameTag=host.querySelector('.surf-ze-name'),phrase=host.querySelector('.surf-ze-phrase');
@@ -156,7 +160,7 @@ function tick(now){raf=0;if(!active)return;const delta=previous?Math.max(0,now-p
 const loaded=new Map();
 function load(key){const src=ATLAS[key].src;if(!loaded.has(src))loaded.set(src,new Promise((resolve,reject)=>{const i=new Image();i.onload=resolve;i.onerror=()=>{loaded.delete(src);reject(Error('sprite'));};i.src=src;}));return loaded.get(src);}
 let starting=false;
-async function greet(){if(!ready||!visible||active||starting||paused())return;const now=performance.now();if(now-lastGreeting<GAP)return;
+async function greet(){paintSky();if(!ready||!visible||active||starting||paused())return;const now=performance.now();if(now-lastGreeting<GAP)return;
  starting=true;let next=build(nextScene());
  try{await Promise.all(next.atlases.map(load));}catch{next=build('ze');try{await Promise.all(next.atlases.map(load));}catch{starting=false;return;}}
  starting=false;if(!visible||active||paused())return;
