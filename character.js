@@ -17,6 +17,9 @@
   const ground=[.9697,.9722,.9747,.9672,.9697,.9698,.9723,.9723,.9673,.9698];
   const drizzleGround=[.94444,.94444,.94444,.94192,.94697,.94710,.94458,.94710,.94458,.94207];
   /* guarda-chuva: passo medido quadro a quadro pelo pé no chão (o desenho anda desigual; passo fixo fazia o pé deslizar) */
+  /* sol: cabeça parada no lugar (o desenho escorregava pra trás e voltava) e passo medido pelo pé no chão */
+  const sunHead=[.5333,.5093,.4929,.4854,.4766,.5333,.5169,.4967,.4879,.4778];
+  const sunSteps=[.0764,.0885,.0698,.0473,.0596,.0863,.0942,.0706,.0495,.0567];
   const drizzleSteps=[.0703,.0781,.0662,.0357,.0451,.0851,.0971,.0734,.0354,.0416];
   const drizzleHead=[.52141,.48737,.42821,.36616,.30479,.53401,.48737,.42317,.36616,.29975];
   const mildHead=[.47840,.47068,.45820,.45062,.43827,.48457,.47222,.46130,.45062,.43827,.50617,.49691,.48297,.47222,.45988];
@@ -72,7 +75,7 @@
       }
     }
     sprite.style.transform=left?'scaleX(-1)':'scaleX(1)';
-    sprite.style.translate=activeVariant==='drizzle'&&atlas==='walk'?`${((left?-1:1)*(.5-drizzleHead[index])*traveler.offsetWidth).toFixed(2)}px ${((.95062-drizzleGround[index])*traveler.offsetWidth).toFixed(2)}px`:activeVariant==='sunny'&&atlas==='walk'?'0px '+((.96-ground[index])*traveler.offsetWidth).toFixed(2)+'px':'0px 0px';
+    sprite.style.translate=activeVariant==='drizzle'&&atlas==='walk'?`${((left?-1:1)*(.5-drizzleHead[index])*traveler.offsetWidth).toFixed(2)}px ${((.95062-drizzleGround[index])*traveler.offsetWidth).toFixed(2)}px`:activeVariant==='sunny'&&atlas==='walk'?`${((left?-1:1)*(.5-sunHead[index])*traveler.offsetWidth).toFixed(2)}px ${((.96-ground[index])*traveler.offsetWidth).toFixed(2)}px`:'0px 0px';
     if(activeVariant==='mild'){
       const cell=atlas==='walk'?index:atlas==='greeting'?[10,11,11,14][index]:index<4?10:index%2?13:12;
       sprite.style.translate=`${((left?-1:1)*(.5-mildHead[cell])*traveler.offsetWidth).toFixed(2)}px ${((.96-mildGround[cell])*traveler.offsetWidth).toFixed(2)}px`;
@@ -105,7 +108,7 @@
     const state=AquaWalkMotion.sample(elapsed,path);
     let {x,pose,frame,atlas,left,kind}=state;
     if(activeVariant==='storm'&&!reduce.matches){const r=stormSample(elapsed);x=r.x;pose=r.pose;atlas='walk';frame=r.frame;left=false;kind='storm';state.opacity=r.opacity}
-    if(activeVariant==='drizzle'&&atlas==='walk'&&pose!=='turning-back'&&pose!=='running')frame=AquaWalkMotion.frameForSteps(state.distance,path.size,drizzleSteps);
+    if((activeVariant==='drizzle'||activeVariant==='sunny')&&atlas==='walk'&&pose!=='turning-back'&&pose!=='running')frame=AquaWalkMotion.frameForSteps(state.distance,path.size,activeVariant==='sunny'?sunSteps:drizzleSteps);
     if(reduce.matches){x=stopX;atlas='greeting';frame=3;pose='greeting';kind='care'}
     if(frozen&&elapsed<path.marks.enter){x=stopX;atlas='greeting';frame=3;pose='greeting'}
     if(pose==='greeting'){
