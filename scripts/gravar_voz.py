@@ -18,10 +18,10 @@ CANDIDATAS = {
     'brisa': {'pt': [('pt-BR-FranciscaNeural', {}), ('pt-BR-ThalitaMultilingualNeural', {})],
               'es': [('es-ES-ElviraNeural', {})], 'en': [('en-US-AriaNeural', {}), ('en-US-JennyNeural', {})]},
     # Niko é surfista jovem e animado: voz mais leve, um pouco mais rápida e mais aguda
-    'niko':  {'pt': [('en-AU-WilliamMultilingualNeural', {'rate': '+10%', 'pitch': '+6Hz'}), ('en-US-AndrewMultilingualNeural', {'rate': '+14%', 'pitch': '+10Hz'})],
+    'niko':  {'pt': [('pt-BR-AntonioNeural', {'rate': '+10%', 'pitch': '+16Hz'})],   # português nativo, sem sotaque
               'es': [('es-AR-TomasNeural', {'rate': '+12%', 'pitch': '+8Hz'}), ('es-ES-AlvaroNeural', {'pitch': '+12Hz', 'rate': '+10%'})],
               'en': [('en-AU-WilliamMultilingualNeural', {'rate': '+10%', 'pitch': '+6Hz'}), ('en-US-AndrewNeural', {'rate': '+12%', 'pitch': '+8Hz'})]},
-    'jorge': {'pt': [('en-US-BrianMultilingualNeural', {}), ('pt-BR-AntonioNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
+    'jorge': {'pt': [('pt-BR-AntonioNeural', {'pitch': '-22Hz', 'rate': '-8%'})],   # português nativo, sem sotaque
               'es': [('es-MX-JorgeNeural', {}), ('es-ES-AlvaroNeural', {'pitch': '-14Hz', 'rate': '-6%'})],
               'en': [('en-US-ChristopherNeural', {}), ('en-US-EricNeural', {})]},
 }

@@ -10,6 +10,9 @@ const AquaWalkMotion={
     return {width,home,size,speed,stride,start,cross,marks};
   },
   frameForDistance(distance,stride){return Math.floor(Math.max(0,distance)/stride*10)%10},
+  /* uneven drawings: steps[i] is how far the body moves while frame i shows (fraction of the sprite box),
+     measured from the foot on the ground, so the planted foot doesn't slide */
+  frameForSteps(distance,size,steps){const total=steps.reduce((a,b)=>a+b,0);let r=(Math.max(0,distance)/size)%total,i=0;while(i<steps.length-1&&r>=steps[i]){r-=steps[i];i++}return i},
   sample(time,path){
     const m=path.marks,t=((time%m.end)+m.end)%m.end;
     let x=path.home,atlas='care',frame=0,left=false,pose='resting',kind='sunny',distance=0;

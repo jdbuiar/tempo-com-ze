@@ -16,6 +16,8 @@
   let path=AquaWalkMotion.create(1000,360,180);
   const ground=[.9697,.9722,.9747,.9672,.9697,.9698,.9723,.9723,.9673,.9698];
   const drizzleGround=[.94444,.94444,.94444,.94192,.94697,.94710,.94458,.94710,.94458,.94207];
+  /* guarda-chuva: passo medido quadro a quadro pelo pé no chão (o desenho anda desigual; passo fixo fazia o pé deslizar) */
+  const drizzleSteps=[.0703,.0781,.0662,.0357,.0451,.0851,.0971,.0734,.0354,.0416];
   const drizzleHead=[.52141,.48737,.42821,.36616,.30479,.53401,.48737,.42317,.36616,.29975];
   const mildHead=[.47840,.47068,.45820,.45062,.43827,.48457,.47222,.46130,.45062,.43827,.50617,.49691,.48297,.47222,.45988];
   const mildGround=[.96296,.95679,.95679,.95679,.95679,.95666,.95666,.95666,.95356,.95356,.95988,.95988,.95988,.95988,.95988];
@@ -103,6 +105,7 @@
     const state=AquaWalkMotion.sample(elapsed,path);
     let {x,pose,frame,atlas,left,kind}=state;
     if(activeVariant==='storm'&&!reduce.matches){const r=stormSample(elapsed);x=r.x;pose=r.pose;atlas='walk';frame=r.frame;left=false;kind='storm';state.opacity=r.opacity}
+    if(activeVariant==='drizzle'&&atlas==='walk'&&pose!=='turning-back'&&pose!=='running')frame=AquaWalkMotion.frameForSteps(state.distance,path.size,drizzleSteps);
     if(reduce.matches){x=stopX;atlas='greeting';frame=3;pose='greeting';kind='care'}
     if(frozen&&elapsed<path.marks.enter){x=stopX;atlas='greeting';frame=3;pose='greeting'}
     if(pose==='greeting'){
