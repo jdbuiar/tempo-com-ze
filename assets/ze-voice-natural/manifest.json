@@ -233,6 +233,65 @@
     "Boa! Até mais, Jorge!": "assets/ze-voice-natural/surf/ze-pt-c90e14a7.mp3",
     "Calorão, Jorge!": "assets/ze-voice-natural/surf/ze-pt-d909b8af.mp3",
     "Protetor e muita água, combinado?": "assets/ze-voice-natural/surf/ze-pt-28ed4c77.mp3"
+   },
+   "niko": {
+    "Aloha! Eu sou o Niko. O mar tá chamando, hein?": "assets/ze-voice-natural/surf/niko-pt-30efbaa7.mp3",
+    "Confere o vento antes de remar. Hang loose!": "assets/ze-voice-natural/surf/niko-pt-bb0641e5.mp3",
+    "E aí, galera! Niko na área.": "assets/ze-voice-natural/surf/niko-pt-d2700510.mp3",
+    "Maré enchendo e prancha encerada. Bora!": "assets/ze-voice-natural/surf/niko-pt-5b4e5f40.mp3",
+    "Fala, surfista! Hoje é dia de remar bastante.": "assets/ze-voice-natural/surf/niko-pt-6ddba6e8.mp3",
+    "Respeita a vez no pico e boa sessão!": "assets/ze-voice-natural/surf/niko-pt-ebd97c0d.mp3",
+    "Opa! Já olhou o período das ondas?": "assets/ze-voice-natural/surf/niko-pt-09b77789.mp3",
+    "Período longo é onda com mais força. Fica esperto!": "assets/ze-voice-natural/surf/niko-pt-f13cce5f.mp3",
+    "Salve! Primeiro eu observo o mar uns minutos.": "assets/ze-voice-natural/surf/niko-pt-6762c80a.mp3",
+    "Depois escolho o canal pra entrar. Hang loose!": "assets/ze-voice-natural/surf/niko-pt-51209385.mp3",
+    "Tudo! Tô indo ver como tá o mar.": "assets/ze-voice-natural/surf/niko-pt-0fd555ea.mp3",
+    "Então até mais, Jorge!": "assets/ze-voice-natural/surf/niko-pt-359aaa9e.mp3",
+    "E aí, Jorge! Vai cair hoje?": "assets/ze-voice-natural/surf/niko-pt-5dafdb0d.mp3",
+    "Tempo bom pra isso!": "assets/ze-voice-natural/surf/niko-pt-7d78be77.mp3",
+    "Chuva fraca não atrapalha a onda.": "assets/ze-voice-natural/surf/niko-pt-bc9e371a.mp3",
+    "Pode deixar, Jorge!": "assets/ze-voice-natural/surf/niko-pt-85264cb8.mp3",
+    "Jorge, de capa amarela!": "assets/ze-voice-natural/surf/niko-pt-3af24673.mp3",
+    "Faz bem. Molhado eu já vou ficar!": "assets/ze-voice-natural/surf/niko-pt-7eaa8ae7.mp3",
+    "Por isso eu vou de roupa de borracha.": "assets/ze-voice-natural/surf/niko-pt-a06782b8.mp3",
+    "Gelada, mas a onda tá boa!": "assets/ze-voice-natural/surf/niko-pt-efac9373.mp3",
+    "Jorge, de cachecol e tudo!": "assets/ze-voice-natural/surf/niko-pt-0c83439e.mp3",
+    "Eu vou rapidinho e depois tomo um chocolate quente!": "assets/ze-voice-natural/surf/niko-pt-3a6e706d.mp3",
+    "Dia perfeito pra cair na água!": "assets/ze-voice-natural/surf/niko-pt-7fa080fc.mp3",
+    "Passei! E vou beber bastante água também.": "assets/ze-voice-natural/surf/niko-pt-74d6bf71.mp3",
+    "Jorge! Também vai pro mar?": "assets/ze-voice-natural/surf/niko-pt-89d67eb4.mp3",
+    "Entra perto do guarda-vidas, tá?": "assets/ze-voice-natural/surf/niko-pt-7895c04e.mp3"
+   },
+   "jorge": {
+    "Fala, Niko! Tudo certo?": "assets/ze-voice-natural/surf/jorge-pt-8a229fb4.mp3",
+    "Vento fraco hoje, deve estar bom.": "assets/ze-voice-natural/surf/jorge-pt-9b9d070d.mp3",
+    "Fala, Brisa! Tudo certo?": "assets/ze-voice-natural/surf/jorge-pt-4c788284.mp3",
+    "Hoje só vou caminhar na areia.": "assets/ze-voice-natural/surf/jorge-pt-d08589d7.mp3",
+    "Boas ondas, Niko!": "assets/ze-voice-natural/surf/jorge-pt-2b2e137d.mp3",
+    "Boas ondas, Brisa!": "assets/ze-voice-natural/surf/jorge-pt-c94c9fe7.mp3",
+    "Fala, Zé! Indo pra praia?": "assets/ze-voice-natural/surf/jorge-pt-381e8220.mp3",
+    "Tá agradável hoje, né?": "assets/ze-voice-natural/surf/jorge-pt-4680fe11.mp3",
+    "Ô, Niko, com essa chuva?": "assets/ze-voice-natural/surf/jorge-pt-47565430.mp3",
+    "Mas se trovejar, sai da água, hein!": "assets/ze-voice-natural/surf/jorge-pt-880d13b0.mp3",
+    "Ô, Brisa, com essa chuva?": "assets/ze-voice-natural/surf/jorge-pt-27c4d51e.mp3",
+    "Em dia de chuva eu não saio sem ela.": "assets/ze-voice-natural/surf/jorge-pt-bdaeab89.mp3",
+    "Cuidado aí e boas ondas!": "assets/ze-voice-natural/surf/jorge-pt-468a4a74.mp3",
+    "Com essa chuva, não tem jeito.": "assets/ze-voice-natural/surf/jorge-pt-bd085efc.mp3",
+    "Isso aí, Zé. Até mais!": "assets/ze-voice-natural/surf/jorge-pt-9eb63f2e.mp3",
+    "Brrr! Que frio, Niko!": "assets/ze-voice-natural/surf/jorge-pt-2860eedf.mp3",
+    "A água deve estar gelada!": "assets/ze-voice-natural/surf/jorge-pt-66214cbe.mp3",
+    "Brrr! Que frio, Brisa!": "assets/ze-voice-natural/surf/jorge-pt-0fa139ac.mp3",
+    "Com esse vento frio, nem penso em entrar.": "assets/ze-voice-natural/surf/jorge-pt-65d76004.mp3",
+    "Boa ideia! Até mais!": "assets/ze-voice-natural/surf/jorge-pt-cc481d91.mp3",
+    "Zé, que frio, hein!": "assets/ze-voice-natural/surf/jorge-pt-a390e566.mp3",
+    "E de tomar um café quentinho depois!": "assets/ze-voice-natural/surf/jorge-pt-9aa09e98.mp3",
+    "Calorão, hein, Niko!": "assets/ze-voice-natural/surf/jorge-pt-b3938f72.mp3",
+    "Passou protetor?": "assets/ze-voice-natural/surf/jorge-pt-7c26ab73.mp3",
+    "Calorão, hein, Brisa!": "assets/ze-voice-natural/surf/jorge-pt-03f9406d.mp3",
+    "Vou dar um mergulho pra refrescar.": "assets/ze-voice-natural/surf/jorge-pt-d1020016.mp3",
+    "Combinado. Boas ondas!": "assets/ze-voice-natural/surf/jorge-pt-be703986.mp3",
+    "Bom demais pra um mergulho!": "assets/ze-voice-natural/surf/jorge-pt-afdcf10e.mp3",
+    "Combinado, Zé! Valeu!": "assets/ze-voice-natural/surf/jorge-pt-990dd7d9.mp3"
    }
   },
   "es": {
@@ -455,6 +514,13 @@
    "en": {
     "voice": "en-US-ChristopherNeural",
     "opts": {}
+   },
+   "pt": {
+    "voice": "pt-BR-AntonioNeural",
+    "opts": {
+     "pitch": "-22Hz",
+     "rate": "-8%"
+    }
    }
   },
   "ze": {
@@ -484,6 +550,13 @@
     "opts": {
      "rate": "+12%",
      "pitch": "+8Hz"
+    }
+   },
+   "pt": {
+    "voice": "pt-BR-AntonioNeural",
+    "opts": {
+     "rate": "+10%",
+     "pitch": "+16Hz"
     }
    }
   }
