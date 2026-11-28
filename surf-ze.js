@@ -45,8 +45,8 @@ const duoActor=(atlas,name,row,jorge,who)=>{const o=(jorge?6:0)+row*12,key=jorge
  const smooth=key==='brisa'||key==='niko'?WALK[key]:key==='jorge'?JORGE_WALK[row]:ZE_WALK[row];
  return {name,fade:!smooth,walk:smooth,arrive:seq(atlas,[jorge?o+4:o+2]),listen:seq(atlas,[o+4]),talk:seq(atlas,jorge?[o+2,o+3]:[o+3,o+2]),exitWalk:smooth};};
 
-/* Jorge's outfit (and Zé's street clothes) follow the sky shown on the main forecast. */
-function weatherRow(){const v=document.querySelector('[data-variant]')?.dataset.variant;return v==='sunny'?3:['rain','drizzle','storm'].includes(v)?1:v==='cold'?2:0;}
+/* Jorge's outfit (and Zé's street clothes) follow the sky at the chosen beach right now; the main forecast only if the beach has no data yet. */
+function weatherRow(){const sky=window.SurfSky?.();if(Number.isInteger(sky))return sky;const v=document.querySelector('[data-variant]')?.dataset.variant;return v==='sunny'?3:['rain','drizzle','storm'].includes(v)?1:v==='cold'?2:0;}
 const WEATHER=['mild','rain','cold','hot'];
 
 /* ---------- Lines (surf-falas.js) ---------- */
