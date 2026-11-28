@@ -65,9 +65,9 @@ html.ze-voice-on .ze-sound-hint{display:none}
 .surf-ceu[data-ceu=nublado]{background:linear-gradient(#b9cdd44d,transparent 70%)}
 .surf-ceu[data-ceu=nublado] .ceu-nuvem{opacity:1;filter:saturate(.4) brightness(.93)}
 .surf-ceu[data-ceu=garoa]{background:linear-gradient(#a7bec74d,transparent 75%)}
-.surf-ceu[data-ceu=garoa] .ceu-nuvem{opacity:1;filter:saturate(.3) brightness(.86)}.surf-ceu[data-ceu=garoa] .ceu-gotas:not(.g2){opacity:.17;background-size:18px 22px}
+.surf-ceu[data-ceu=garoa] .ceu-nuvem{opacity:1;filter:saturate(.3) brightness(.86)}.surf-ceu[data-ceu=garoa] .ceu-gotas:not(.g2){opacity:.38;background-size:18px 22px}
 .surf-ceu[data-ceu=chuva]{background:linear-gradient(#90a9b466,transparent 80%)}
-.surf-ceu[data-ceu=chuva] .ceu-nuvem{opacity:1;filter:saturate(.2) brightness(.74)}.surf-ceu[data-ceu=chuva] .ceu-gotas{opacity:.42}
+.surf-ceu[data-ceu=chuva] .ceu-nuvem{opacity:1;filter:saturate(.2) brightness(.74)}.surf-ceu[data-ceu=chuva] .ceu-gotas{opacity:.6}
 .surf-ceu[data-ceu=tempestade]{background:linear-gradient(#6f879380,transparent 85%)}
 .surf-ceu[data-ceu=tempestade] .ceu-nuvem{opacity:1;filter:saturate(.15) brightness(.6)}.surf-ceu[data-ceu=tempestade] .ceu-gotas{opacity:.5}.surf-ceu[data-ceu=tempestade] .ceu-raio{opacity:1}
 @keyframes ceu-vento{from{translate:-14px 0}to{translate:18px 0}}
@@ -75,3 +75,11 @@ html.ze-voice-on .ze-sound-hint{display:none}
 @keyframes ceu-raio{0%,88%,93%,100%{opacity:0}89%,91%{opacity:1}}
 @media(max-width:750px){.ceu-astro{width:42px;height:42px}.ceu-nuvem.n1{width:96px}.ceu-nuvem.n2{width:110px}.ceu-nuvem.n3{display:none}}
 @media(prefers-reduced-motion:reduce){.ceu-nuvem,.ceu-gotas,.ceu-raio{animation:none}}
+
+/* céu da praia sempre aberto, mesmo sem ninguém visitando */
+.surf-ze-welcome.surf-ze-sky{height:215px}
+@media(max-width:750px){.surf-ze-welcome.surf-ze-sky{height:275px}}
+@media(max-width:430px){.surf-ze-welcome.surf-ze-sky{height:270px}}
+.surf-ze-welcome.surf-ze-sky.surf-ze-duo.surf-ze-active{height:300px}
+@media(max-width:750px){.surf-ze-welcome.surf-ze-sky.surf-ze-duo.surf-ze-active{height:285px}}
+.surf-ze-welcome:not(.surf-ze-active) .surf-ze-actor{visibility:hidden}

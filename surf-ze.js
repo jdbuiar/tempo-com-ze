@@ -73,7 +73,8 @@ const host=document.createElement('div');host.id='surf-ze';host.className='surf-
 host.innerHTML='<div class="surf-ze-actor" role="img"><div class="surf-ze-sprite" aria-hidden="true"></div></div><div class="surf-ze-actor surf-ze-actor-b" role="img" hidden><div class="surf-ze-sprite" aria-hidden="true"></div></div><div class="surf-ze-bubble" hidden><span class="surf-ze-name"></span><p class="surf-ze-phrase" aria-live="polite"></p><span class="ze-sound-hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="w1" d="M16 9.5a3.5 3.5 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="w2" d="M18.5 7a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></div>';
 /* sky at the beach right now (clouds, drizzle, rain, sun), behind the characters */
 const sky=document.createElement('div');sky.className='surf-ceu';sky.setAttribute('aria-hidden','true');sky.innerHTML='<i class="ceu-astro"></i><i class="ceu-nuvem n1"></i><i class="ceu-nuvem n2"></i><i class="ceu-nuvem n3"></i><i class="ceu-gotas"></i><i class="ceu-gotas g2"></i><i class="ceu-raio"></i>';host.prepend(sky);
-function paintSky(){const s=window.SurfSkyKind?.();sky.dataset.ceu=s?s.kind:'';sky.classList.toggle('noite',!!s&&!s.day);}
+/* the beach sky stays open all the time (not only during a visit), so a drizzle at the beach is always visible */
+function paintSky(){const s=window.SurfSkyKind?.();sky.dataset.ceu=s?s.kind:'';sky.classList.toggle('noite',!!s&&!s.day);host.classList.toggle('surf-ze-sky',!!s);}
 window.addEventListener('ze:surf-render',paintSky);
 const sea=document.createElement('div');sea.className='surf-mar';sea.setAttribute('aria-hidden','true');
 const [actorA,actorB]=host.querySelectorAll('.surf-ze-actor'),[spriteA,spriteB]=host.querySelectorAll('.surf-ze-sprite');
