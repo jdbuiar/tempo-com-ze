@@ -93,7 +93,7 @@ function build(id){
  if(id==='ze'){const i=pickIndex('ze-surf-lines-v1',ZE_LINES.pt.length);return {id,a:ACTOR.ze,voice:true,lines:[['A',ZE_LINES[l][i]]],line:i,atlases:['zeWalk','zeGreet']};}
  if(id==='niko'||id==='brisa'){const pool=SOLO_LINES[id][l],i=pickIndex('ze-surf-'+id+'-v1',pool.length);return {id,a:ACTOR[id],lines:pool[i].map(t=>['A',t]),line:i,atlases:id==='brisa'?['brisa','walkBrisa']:['niko','walkNiko']};}
  const who=id==='duoZe'?'ze':id==='duoNiko'?'niko':'brisa',atlas=id;
- const chats=(who==='ze'?ZE_CHATS:SURF_CHATS)[l][w],i=pickIndex('ze-surf-'+id+'-'+w+'-v1',chats.length);
+ const chats=(who==='ze'?ZE_CHATS:SURF_CHATS)[l][w],i=pickIndex('ze-surf-'+id+'-'+w+'-v2',chats.length);
  return {id,who,row,weather:w,line:i,a:duoActor(atlas,ACTOR[who].name,row,false,who),b:duoActor(atlas,'JORGE',row,true),lines:chats[i].map(([s,t])=>[s,t.replace('{A}',ACTOR[who].name[0]+ACTOR[who].name.slice(1).toLowerCase())]),atlases:[...new Set([atlas,...[...scene_walks(who,row)]])]};
 }
 function scene_walks(who,row){const w=[];if(who==='brisa')w.push('walkBrisa');if(who==='niko')w.push('walkNiko');w.push(['walkJorge','walkJorgeRain','walkJorgeCold'][row]);if(who==='ze'&&row===0)w.push('walkZe');return w.filter(Boolean);}

@@ -14,8 +14,9 @@ const AquaCharacterWeather={
     return {variant,period,isDay,code,temp,snow,sunCare:variant==='sunny',alert:!!data.alert&&variant!=='storm'};
   },
   /* Each cycle Zé picks the next line from the pool, so he does not repeat himself every lap. */
-  turn:Math.floor(Math.random()*1000),
-  next(){this.turn++;},
+  /* revezamento: lembra a última fala e passa para a próxima a cada visita e a cada volta do Zé, sem repetir */
+  turn:(()=>{let n=Math.floor(Math.random()*1000);try{const s=Number(localStorage.getItem('ze-turn'));if(Number.isInteger(s))n=s+1;localStorage.setItem('ze-turn',String(n));}catch{}return n;})(),
+  next(){this.turn++;try{localStorage.setItem('ze-turn',String(this.turn));}catch{}},
   pools:{
     greet:{
       pt:{morning:['Oi, meu nome é Zé. Bom dia!','Bom dia! O Zé chegou pra contar como está o tempo.','Bom dia, pessoal! Já olharam o céu hoje?','Opa, bom dia! Bora ver a previsão juntos?'],
